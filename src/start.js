@@ -12,7 +12,6 @@ import Register from './components/register'
 import App from './components/app'
 import DesignedTrip from './components/designedtrip'
 import CreateTrip from './components/createtrip'
-import MapContainer from './components/mapcontainer';
 // __ __ __ __ __ __ __  Redux __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
@@ -39,7 +38,6 @@ const loggedInRouter = (
             <Route path="/" component={App}>
             <IndexRoute component={DesignedTrip}/>
             <Route path="createTrip" component={CreateTrip}/>
-            <Route path="map" component={MapContainer}/>
       	    </Route>
         </Router>
     </Provider>
