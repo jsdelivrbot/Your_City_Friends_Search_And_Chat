@@ -15,7 +15,7 @@ const express = require('express'),
       io = require('socket.io')(server),
       // ==================================================================== \\
       socket_io = require('./socket_io')
-
+//aoooo
 app.disable('x-powered-by');
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
