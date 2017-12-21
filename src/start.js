@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link, Redirect, IndexRoute, hashHistory, browserHistory } from 'react-router';
+import { HashRouter, BrowserRouter, Route, Switch, Link, Redirect } from 'react-router-dom'
 // __ __ __ __ __ __  Components  __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 //*******************************
 // ***** Log-out components *****
@@ -16,41 +16,35 @@ import CreateTrip from './components/createtrip'
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import {Provider} from 'react-redux'
-import reduxPromise from 'redux-promise'
-import reducer from './reducer'
+import promise from 'redux-promise'
+import reducers from './reducers'
+// import reducers from './reducer'
 //exporting to make it available to socket
-export const store = createStore(reducer, composeWithDevTools(applyMiddleware(reduxPromise)))
+export const store = createStore(reducers, composeWithDevTools(applyMiddleware(promise)))
 
 const notLoggedInRouter = (
     <Provider store={store}>
-        <Router history={hashHistory}>
-            <Route path="/" component={Welcome}>
+        <HashRouter>
+            <Switch>
+            <Route path="/register" component={Register}/>
             <Route path="/login" component={Login}/>
-            <IndexRoute component={Register}/>
-      	    </Route>
-        </Router>
+            <Route path="/" component={Welcome}/>
+      	    </Switch>
+        </HashRouter>
     </Provider>
 );
 
-const loggedInRouter = (
-    <Provider store={store}>
-        <Router history={browserHistory}>
-            <Route path="/" component={App}>
-            <IndexRoute component={DesignedTrip}/>
-            <Route path="createTrip" component={CreateTrip}/>
-      	    </Route>
-        </Router>
-    </Provider>
-);
-const router = location.pathname === '/welcome/' ? notLoggedInRouter : loggedInRouter
 
-ReactDOM.render(router, document.querySelector('main'));
+// const loggedInRouter = (
+//     <Provider store={store}>
+//         <BrowserRouter>
+//             <Route path="/" component={App}>
+//             <IndexRoute component={DesignedTrip}/>
+//             <Route path="createTrip" component={CreateTrip}/>
+//       	    </Route>
+//         </BrowserRouter>
+//     </Provider>
+// );
+const routerDom = location.pathname === '/welcome/' ? notLoggedInRouter : loggedInRouter
 
-// <IndexRoute component={ProfilePic}/>
-// <Route path="friends" component={Friends}/>
-// <Route path="private_chat/:id" component={PrivateChat}/>
-// <Route path="user/:id" component={OtherUsersProfile}/>
-// <Route path="online" component={Online}/>
-// <Route path="chat" component={Chat}/>
-// <Route path="notFound" component={NotFound}/>
-// <Redirect from="*" to="/" />
+ReactDOM.render(routerDom, document.querySelector('main'));

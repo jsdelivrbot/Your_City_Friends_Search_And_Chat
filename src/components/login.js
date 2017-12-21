@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Axios from '../axios'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import {connect} from 'react-redux'
 import {verifyCredential} from '../actions'
 
