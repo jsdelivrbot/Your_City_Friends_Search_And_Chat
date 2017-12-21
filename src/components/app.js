@@ -12,7 +12,7 @@ class App extends Component {
     }
     componentDidMount() {
         const {dispatch, user} = this.props
-        console.log('user:', this.props.user);
+        console.log('user:');
         this.props.getUserinfo()
 
     }
@@ -36,7 +36,7 @@ class App extends Component {
         // }
 
 
-        const children = React.cloneElement(this.props.children, {});
+
 
 
         return(
@@ -46,7 +46,7 @@ class App extends Component {
                 <p>hello {user.firstname}!</p>
                 {this.getWeather()}
                 <p></p>
-                {children}
+
             </div>
         )
     }

@@ -35,16 +35,16 @@ const notLoggedInRouter = (
 );
 
 
-// const loggedInRouter = (
-//     <Provider store={store}>
-//         <BrowserRouter>
-//             <Route path="/" component={App}>
-//             <IndexRoute component={DesignedTrip}/>
-//             <Route path="createTrip" component={CreateTrip}/>
-//       	    </Route>
-//         </BrowserRouter>
-//     </Provider>
-// );
+const loggedInRouter = (
+    <Provider store={store}>
+        <BrowserRouter>
+            <Switch>
+            <Route path="/" component={App}/>
+            <Route path="createTrip" component={CreateTrip}/>
+            </Switch>
+        </BrowserRouter>
+    </Provider>
+);
 const routerDom = location.pathname === '/welcome/' ? notLoggedInRouter : loggedInRouter
 
 ReactDOM.render(routerDom, document.querySelector('main'));
