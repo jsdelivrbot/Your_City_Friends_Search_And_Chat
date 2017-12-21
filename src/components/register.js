@@ -90,9 +90,7 @@ function validate(values) {
     if(values.gender !== 'Male' && values.gender !== 'male' && values.gender !== 'Female' && values.gender !== 'female') {
         errors.gender = "Please enter your gender as: 'Male/Female'"
     }
-    //validate the input from 'values'
-    // if errors is empty ( {} ), the form is fine to submit!.
-    //If errors has *any* properties, redux form assumes FORM IS INVALID
+
     return errors;
 }
 

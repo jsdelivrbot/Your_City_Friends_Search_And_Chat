@@ -12,7 +12,7 @@ export default class Welcome extends Component {
                 <header>
                 <h1>DESIGN YOUR ROAD TRIP BRO</h1>
                 </header>
-                <Link to="/register">Link</Link>
+                <Link to="/login">Login</Link>
                 <Register />
                 <footer>
                 <p>&copy; Pasquale Coretti</p>
