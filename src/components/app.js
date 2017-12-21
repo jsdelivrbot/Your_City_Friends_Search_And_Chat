@@ -12,14 +12,18 @@ class App extends Component {
     }
     componentDidMount() {
         const {dispatch, user} = this.props
-        console.log(this.props.user);
-        dispatch(getUserinfo())
+        console.log('user:', this.props.user);
+        this.props.getUserinfo()
 
     }
 
+    getWeather() {
+        const { user: {lat, lng} } = this.props
+        // this.props.displayInfoWheather(lat, lng)
+    }
     render() {
         if(!this.props.user) {
-            return null
+            return (<div>Loading</div>)
         }
         const {user, wheather, dispatch} = this.props
         console.log('wheather', wheather);
@@ -40,7 +44,7 @@ class App extends Component {
                 <Link to='/createTrip'>Create your trip</Link>
                 {this.state.whether && <p>clear wheather today! perfect time to go out!</p>}
                 <p>hello {user.firstname}!</p>
-
+                {this.getWeather()}
                 <p></p>
                 {children}
             </div>
@@ -55,4 +59,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, {displayInfoWheather, getUserinfo})(App)
