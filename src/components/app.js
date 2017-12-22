@@ -30,7 +30,6 @@ class App extends Component {
         // this.props.displayInfoWheather(lat, lng)
     }
     renderUser(){
-        console.log('renderUser:', this.props.user);
         return _.map(this.props.user, usr => {
             return (
                 <div>
@@ -62,7 +61,8 @@ class App extends Component {
 
         return(
             <div>
-                <Link to='/userAddress'>Create your trip</Link>
+                <Link to="/userFromSameCity">Find friend from your same city!</Link>
+                <Link to="/userAddress">Update your information</Link>
                 {this.state.whether && <p>clear wheather today! perfect time to go out!</p>}
                 <p>hello {this.props.user.firstname}!</p>
                 {this.renderUser()}

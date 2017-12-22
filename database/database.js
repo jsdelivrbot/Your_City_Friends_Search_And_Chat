@@ -21,6 +21,62 @@ exports.registerNewUser = function(firstname, lastname, email, password, gender)
   });
 };
 
+// exports.verifyUserCredential = function(email, password) {
+//     const query = `SELECT users.id, password, firstname, lastname, password as hashedPassword, image, gender, city
+//                    FROM users
+//                    INNER JOIN user_profiles
+//                    ON (users.id = user_profiles.user_id)
+//                    WHERE (email_address = ($1))`
+//
+//     const Alternativequery = `SELECT password, id, firstname, lastname, password as hashedPassword, image, gender FROM users WHERE email_address = ($1)`
+//
+//     return db.query(query, [email])
+//     .then((userData) => {
+//         if(userData == 'undefined') {
+//             return db.query(Alternativequery, [email])
+//             .then((userData) => {
+//                 return {
+//                     id: userData.rows[0].id,
+//                     firstname: userData.rows[0].firstname,
+//                     lastname: userData.rows[0].lastname,
+//                     hashedPassword: userData.rows[0].password,
+//                     image: userData.rows[0].image,
+//                     gender: userData.rows[0].gender
+//                 }
+//             })
+//             .then(({id, firstname, lastname, hashedPassword, image, gender, city}) => {
+//                 return checkPassword(password, hashedPassword)
+//                 .then((doesMatch) => {
+//                     if(!doesMatch) {
+//                         throw 'Passwords do not match!'
+//                     }
+//                     return {id, firstname, lastname, image, gender}
+//
+//                 })
+//             })
+//         }
+//         return {
+//             id: userData.rows[0].id,
+//             city: userData.rows[0].city,
+//             firstname: userData.rows[0].firstname,
+//             lastname: userData.rows[0].lastname,
+//             hashedPassword: userData.rows[0].password,
+//             image: userData.rows[0].image,
+//             gender: userData.rows[0].gender
+//         }
+//     })
+//     .then(({id, firstname, lastname, hashedPassword, image, gender, city}) => {
+//         return checkPassword(password, hashedPassword)
+//         .then((doesMatch) => {
+//             if(!doesMatch) {
+//                 throw 'Passwords do not match!'
+//             }
+//             return {id, city, firstname, lastname, image, gender}
+//
+//         })
+//     })
+// }
+
 exports.verifyUserCredential = function(email, password) {
     const query = `SELECT password, id, firstname, lastname, password as hashedPassword, image, gender FROM users WHERE email_address = ($1)`
 
@@ -47,24 +103,21 @@ exports.verifyUserCredential = function(email, password) {
     })
 }
 
-// exports.getUserInformation = function(id) {
-//     query = `SELECT id, firstname, lastname, image, gender FROM users WHERE id = $1`
-//
-//     return db.query(query, [id])
-//     .then((userData) => {
-//         return userData.rows[0]
-//     })
-// }
-//
-// exports.getUserProfileInfo = function(id) {
-//     query = `SELECT bio, age, city, lat, lng FROM user_profiles WHERE user_id = $1`
-//
-//     return db.query(query, [id])
-//     .then((profileData) => {
-//         return profileData.rows[0]
-//     })
-// }
-//alternative
+exports.lookForAddressInformation = function(id) {
+    const query = `SELECT users.id, city, lat, lng
+                   FROM users
+                   INNER JOIN user_profiles
+                   ON (users.id = user_profiles.user_id)
+                   WHERE (users.id = ($1))`
+    return db.query(query, [id])
+    .then((addressInfo) => {
+        return {
+            city: addressInfo.rows[0].city,
+            lat: addressInfo.rows[0].lat,
+            lng: addressInfo.rows[0].lng
+        }
+    })
+}
 
 
 exports.getUserInformation = function(id) {
@@ -129,5 +182,20 @@ exports.updateUserPersonalInfo = function(id, age, bio, city, lat, lng) {
             lat: userData.rows[0].lat,
             lng: userData.rows[0].lng
         }
+    })
+}
+
+exports.findPeopleFromSameCity = function(city) {
+    const query = `SELECT users.id, firstname, lastname, image, city, lat, lng
+                   FROM user_profiles
+                   INNER JOIN users
+                   ON (city = $1)`
+
+    return db.query(query, [city])
+    .then((userData) => {
+        if(typeof userData === 'undefined') {
+            return 'No friends available here'
+        }
+        return userData.rows
     })
 }

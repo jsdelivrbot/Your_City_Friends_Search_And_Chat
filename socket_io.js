@@ -24,9 +24,9 @@ app.get('/connected/:socketId', (req, res, next) => {
     const {socketId} = req.params
     const {id} = req.session.user
 
-    let userJoined = webSockets.every(webSocket => webSocket.userId !== userId)
+    let userJoined = webSockets.every(webSocket => webSocket.userId !== id)
 
-    webSockets.push({ userId, socketId })
+    webSockets.push({ id, socketId })
 
     console.log(`${socketId} belongs to userId ${id}`);
 })

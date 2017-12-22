@@ -1,5 +1,6 @@
 import Axios from '../axios'
 
+export const ADD_PEOPLE_FROM_SAME_CITY = 'add_people_from_same_city'
 export const UPDATE_PROFILE_PICTURE = 'update_profile_picture'
 export const GET_USER_INFO = 'get_user_info'
 export const UPDATE_USER_PERSONAL_INFORMATION = 'update_user_persona_information'
@@ -55,6 +56,19 @@ export function updateUserInfo(age, bio, lat, lng, city, callback) {
 
     return {
         type: UPDATE_USER_PERSONAL_INFORMATION,
+        payload: request
+    }
+}
+
+export function addPeopleFromSameCity(city) {
+    const request = Axios.post('/api/findPeopleFromSameCity', city)
+    // .then((data) => {
+    //     console.log(data);
+    // })
+    console.log('in action addpeoplefromsamecity', city);
+
+    return {
+        type: ADD_PEOPLE_FROM_SAME_CITY,
         payload: request
     }
 }
