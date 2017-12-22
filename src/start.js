@@ -13,6 +13,7 @@ import App from './components/app'
 import userAddress from './components/userAddress'
 import UpdateProfilePic from './components/updateProfilePic'
 import UserFromSameCity from './components/userFromSameCity'
+import Chat from './components/chat'
 // __ __ __ __ __ __ __  Redux __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
@@ -39,6 +40,7 @@ const loggedInRouter = (
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
+            <Route path="/chat/:id" component={Chat}/>
             <Route path="/userFromSameCity" component={UserFromSameCity}/>
             <Route path="/updateProfPic" component={UpdateProfilePic}/>
             <Route path="/userAddress" component={userAddress}/>

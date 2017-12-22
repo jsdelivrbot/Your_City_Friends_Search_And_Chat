@@ -21,62 +21,6 @@ exports.registerNewUser = function(firstname, lastname, email, password, gender)
   });
 };
 
-// exports.verifyUserCredential = function(email, password) {
-//     const query = `SELECT users.id, password, firstname, lastname, password as hashedPassword, image, gender, city
-//                    FROM users
-//                    INNER JOIN user_profiles
-//                    ON (users.id = user_profiles.user_id)
-//                    WHERE (email_address = ($1))`
-//
-//     const Alternativequery = `SELECT password, id, firstname, lastname, password as hashedPassword, image, gender FROM users WHERE email_address = ($1)`
-//
-//     return db.query(query, [email])
-//     .then((userData) => {
-//         if(userData == 'undefined') {
-//             return db.query(Alternativequery, [email])
-//             .then((userData) => {
-//                 return {
-//                     id: userData.rows[0].id,
-//                     firstname: userData.rows[0].firstname,
-//                     lastname: userData.rows[0].lastname,
-//                     hashedPassword: userData.rows[0].password,
-//                     image: userData.rows[0].image,
-//                     gender: userData.rows[0].gender
-//                 }
-//             })
-//             .then(({id, firstname, lastname, hashedPassword, image, gender, city}) => {
-//                 return checkPassword(password, hashedPassword)
-//                 .then((doesMatch) => {
-//                     if(!doesMatch) {
-//                         throw 'Passwords do not match!'
-//                     }
-//                     return {id, firstname, lastname, image, gender}
-//
-//                 })
-//             })
-//         }
-//         return {
-//             id: userData.rows[0].id,
-//             city: userData.rows[0].city,
-//             firstname: userData.rows[0].firstname,
-//             lastname: userData.rows[0].lastname,
-//             hashedPassword: userData.rows[0].password,
-//             image: userData.rows[0].image,
-//             gender: userData.rows[0].gender
-//         }
-//     })
-//     .then(({id, firstname, lastname, hashedPassword, image, gender, city}) => {
-//         return checkPassword(password, hashedPassword)
-//         .then((doesMatch) => {
-//             if(!doesMatch) {
-//                 throw 'Passwords do not match!'
-//             }
-//             return {id, city, firstname, lastname, image, gender}
-//
-//         })
-//     })
-// }
-
 exports.verifyUserCredential = function(email, password) {
     const query = `SELECT password, id, firstname, lastname, password as hashedPassword, image, gender FROM users WHERE email_address = ($1)`
 
@@ -198,4 +142,50 @@ exports.findPeopleFromSameCity = function(city) {
         }
         return userData.rows
     })
+}
+
+exports.loadPrivateMasseges = function(userId, recipientId) {
+    const query = `SELECT sender_id, message, created_at from chat
+                   WHERE (sender_id = ($1) AND recipient_id = ($2))
+                   OR (sender_id = ($2) AND recipient_id = ($1))
+                   ORDER BY created_at DESC
+                   LIMIT 12`
+
+    return db.query(query, [userId, recipientId])
+    .then((dbPrivMsgs) => {
+        const privMsgs = dbPrivMsgs.rows.map(privMsg => {
+            return {
+                newMessage: privMsg.sender_id == userId,
+                message: privMsg.message,
+                time: privMsg.created_at
+            }
+        })
+
+        return {
+            privMsgs, recipientId
+        }
+    })
+}
+
+exports.addPrivMsgToDb = function(message, senderId, recipientId) {
+    const query = `INSERT INTO chat (message, sender_id, recipient_id) VALUES ($1, $2, $3) RETURNING created_at`
+
+    return db.query(query, [message, senderId, recipientId])
+    .then((dbPrivMsg) => {
+
+        const user_message = {
+            newMessage: true,
+            message: message,
+            time: dbPrivMsg.rows[0].created_at
+        }
+        const friend_message = {
+            newMessage: false,
+            message: message,
+            time: dbPrivMsg.rows[0].created_at
+        }
+        return {
+            userMessage: { recipientId: recipientId, message: user_message },
+            friendMessage: { recipientId: senderId, message: friend_message }
+        }
+    });
 }

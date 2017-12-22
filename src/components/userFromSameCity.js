@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {getUserinfo, addPeopleFromSameCity} from '../actions/index'
+import getSocket from '../socket_io'
 
 class UserFromSameCity extends Component {
 
@@ -18,8 +19,9 @@ class UserFromSameCity extends Component {
         })
     }
 
-    handleChatClick(id) {
-        console.log(id);
+    handleChatClick(recipientId) {
+        console.log(recipientId);
+        getSocket().emit('chat', {recipientId})
         //socket io get into the game
     }
 

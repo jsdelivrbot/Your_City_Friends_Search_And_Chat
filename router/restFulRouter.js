@@ -25,7 +25,6 @@ router.post('/api/login', (req, res, next) => {
         res.json({success: true, userData})
         lookForAddressInformation(req.session.user.id)
         .then((address) => {
-            console.log(address);
             if(typeof address !== 'undefined') {
                 req.session.user.city = address.city,
                 req.session.user.lat = address.lat,
@@ -58,7 +57,6 @@ router.get('/api/user', (req, res, next) => {
 
 
 router.post('/api/updatepicture', uploader.single('file'), (req, res) => {
-    console.log('uploading', req.file);
     const {mimetype, filename} = req.file
     const {id} = req.session.user
     if(mimetype === 'image/png' || mimetype === 'image/jpeg' || mimetype === 'image/jpg' || mimetype === 'image/gif') {
@@ -89,8 +87,6 @@ router.post('/api/updateUserInfo', (req, res) => {
     updateUserPersonalInfo(id, age, bio, city, lat, lng)
     .then((userData) => {
         req.session.user.city = userData.city
-        console.log('session after update',req.session);
-        console.log(userData);
         res.json({ success: true, userData })
     })
     .catch((error) => {
@@ -103,7 +99,6 @@ router.post('/api/findPeopleFromSameCity', (req, res) => {
 
     findPeopleFromSameCity(city)
     .then((usersData) => {
-        console.log(usersData);
         res.json({ success: true, usersData })
     })
     .catch((error) => {

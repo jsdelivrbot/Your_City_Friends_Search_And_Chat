@@ -1,5 +1,7 @@
 import Axios from '../axios'
 
+export const ADD_NEW_PRIVATE_MSG = 'add_new_private_msg'
+export const LOAD_PREVIOUS_PRIVATE_MSGS = 'load_previous_private_msgs'
 export const ADD_PEOPLE_FROM_SAME_CITY = 'add_people_from_same_city'
 export const UPDATE_PROFILE_PICTURE = 'update_profile_picture'
 export const GET_USER_INFO = 'get_user_info'
@@ -62,13 +64,25 @@ export function updateUserInfo(age, bio, lat, lng, city, callback) {
 
 export function addPeopleFromSameCity(city) {
     const request = Axios.post('/api/findPeopleFromSameCity', city)
-    // .then((data) => {
-    //     console.log(data);
-    // })
-    console.log('in action addpeoplefromsamecity', city);
 
     return {
         type: ADD_PEOPLE_FROM_SAME_CITY,
         payload: request
+    }
+}
+
+export function loadPreviousPrivateMsgs(prevPrivMsgs) {
+
+    return {
+        type: LOAD_PREVIOUS_PRIVATE_MSGS,
+        prevPrivMsgs
+    }
+}
+
+export function addNewMsg(newChatMsg) {
+    console.log('in action', newChatMsg);
+    return {
+        type: ADD_NEW_PRIVATE_MSG,
+        newChatMsg
     }
 }
