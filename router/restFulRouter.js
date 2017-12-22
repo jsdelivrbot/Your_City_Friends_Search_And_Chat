@@ -1,11 +1,10 @@
 const express = require('express'),
       router = express.Router(),
-      {registerNewUser, verifyUserCredential, getUserInformation, getUserProfileInfo, addProfilePicture, updateUserPersonalInfo} = require('../database/database.js')
+      {registerNewUser, verifyUserCredential, lookForAddressInformation, getUserInformation, getUserProfileInfo, addProfilePicture, updateUserPersonalInfo, findPeopleFromSameCity} = require('../database/database.js')
       const {uploader, uploadAWS3} = require('../storage')
 
 router.post('/api/registration', (req, res, next) => {
     const {firstname, lastname, email, password, gender} = req.body
-    console.log('gender:', gender);
     registerNewUser(firstname, lastname, email, password, gender)
     .then((userData) => {
         req.session.user = {user: true, id: userData.id, firstname: userData.firstname, lastname: userData.lastname}
@@ -22,41 +21,26 @@ router.post('/api/login', (req, res, next) => {
     const {email, password} = req.body
     verifyUserCredential(email, password)
     .then((userData) => {
-        req.session.user = {user: true, id: userData.id, firstname: userData.name, lastname: userData.lastname, gender: userData.gender}
+        req.session.user = {user: true, id: userData.id, firstname: userData.firstname, lastname: userData.lastname, gender: userData.gender}
         res.json({success: true, userData})
+        lookForAddressInformation(req.session.user.id)
+        .then((address) => {
+            if(typeof address !== 'undefined') {
+                req.session.user.city = address.city,
+                req.session.user.lat = address.lat,
+                req.session.user.lng = address.lng
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+
+        })
     })
     .catch((error) => {
+        console.log(error);
         next('error verifying credentials')
     })
 })
-
-
-// 1 version
-// router.get('/api/user', (req, res, next) => {
-//     const {id} = req.session.user
-//     console.log('user');
-//     getUserInformation(id)
-//     .then((userData) => {
-//         console.log(userData);
-//         getUserProfileInfo(id)
-//         .then((profileData) => {
-//             console.log(profileData);
-//             if(profileData) {
-//                 console.log('userData & profileData: ', userData, profileData)
-//                 res.json({success: true, userData})
-//             }
-//         })
-//         .catch((error) => {
-//             console.log(error);
-//         })
-//     })
-//     .catch((error) => {
-//         next('error retriving user information')
-//     })
-// })
-
-// 2 version:
-
 
 router.get('/api/user', (req, res, next) => {
     const {id} = req.session.user
@@ -102,11 +86,23 @@ router.post('/api/updateUserInfo', (req, res) => {
 
     updateUserPersonalInfo(id, age, bio, city, lat, lng)
     .then((userData) => {
-        console.log(userData);
+        req.session.user.city = userData.city
         res.json({ success: true, userData })
     })
     .catch((error) => {
         throw 'error updating information into the database'
+    })
+})
+
+router.post('/api/findPeopleFromSameCity', (req, res) => {
+    const {city} = req.body
+
+    findPeopleFromSameCity(city)
+    .then((usersData) => {
+        res.json({ success: true, usersData })
+    })
+    .catch((error) => {
+        console.log(error);
     })
 })
 

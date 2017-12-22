@@ -28,6 +28,7 @@ export function verifyCredential(email, password) {
 export function getUserinfo() {
     return Axios.get('/api/user')
     .then(({data}) => {
+        console.log('data from action', data);
         return {
             type: 'GET_USER_INFO',
             //data: id, firstname, lastname

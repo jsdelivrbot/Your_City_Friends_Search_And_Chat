@@ -10,7 +10,7 @@ const spicedPg = require('spiced-pg'),
 exports.registerNewUser = function(firstname, lastname, email, password, gender) {
 
   return hashPassword(password).then((hashedPassword) => {
-      let image = gender === 'male' ? defaultImageMale : defaultImageFemale
+      let image = gender === 'male' ||  gender === 'Male' ? defaultImageMale : defaultImageFemale
 
       const query = `INSERT INTO users (firstname, lastname, email_address, password, gender, image)
                      VALUES ($1, $2, $3, $4, $5, '${image}') RETURNING id, firstname, lastname, gender`
@@ -47,24 +47,21 @@ exports.verifyUserCredential = function(email, password) {
     })
 }
 
-// exports.getUserInformation = function(id) {
-//     query = `SELECT id, firstname, lastname, image, gender FROM users WHERE id = $1`
-//
-//     return db.query(query, [id])
-//     .then((userData) => {
-//         return userData.rows[0]
-//     })
-// }
-//
-// exports.getUserProfileInfo = function(id) {
-//     query = `SELECT bio, age, city, lat, lng FROM user_profiles WHERE user_id = $1`
-//
-//     return db.query(query, [id])
-//     .then((profileData) => {
-//         return profileData.rows[0]
-//     })
-// }
-//alternative
+exports.lookForAddressInformation = function(id) {
+    const query = `SELECT users.id, city, lat, lng
+                   FROM users
+                   INNER JOIN user_profiles
+                   ON (users.id = user_profiles.user_id)
+                   WHERE (users.id = ($1))`
+    return db.query(query, [id])
+    .then((addressInfo) => {
+        return {
+            city: addressInfo.rows[0].city,
+            lat: addressInfo.rows[0].lat,
+            lng: addressInfo.rows[0].lng
+        }
+    })
+}
 
 
 exports.getUserInformation = function(id) {
@@ -130,4 +127,65 @@ exports.updateUserPersonalInfo = function(id, age, bio, city, lat, lng) {
             lng: userData.rows[0].lng
         }
     })
+}
+
+exports.findPeopleFromSameCity = function(city) {
+    const query = `SELECT users.id, firstname, lastname, image, city, lat, lng
+                   FROM user_profiles
+                   INNER JOIN users
+                   ON (city = $1)`
+
+    return db.query(query, [city])
+    .then((userData) => {
+        if(typeof userData === 'undefined') {
+            return 'No friends available here'
+        }
+        return userData.rows
+    })
+}
+
+exports.loadPrivateMasseges = function(userId, recipientId) {
+    const query = `SELECT sender_id, message, created_at from chat
+                   WHERE (sender_id = ($1) AND recipient_id = ($2))
+                   OR (sender_id = ($2) AND recipient_id = ($1))
+                   ORDER BY created_at DESC
+                   LIMIT 12`
+
+    return db.query(query, [userId, recipientId])
+    .then((dbPrivMsgs) => {
+        const privMsgs = dbPrivMsgs.rows.map(privMsg => {
+            return {
+                newMessage: privMsg.sender_id == userId,
+                message: privMsg.message,
+                time: privMsg.created_at
+            }
+        })
+
+        return {
+            privMsgs, recipientId
+        }
+    })
+}
+
+exports.addPrivMsgToDb = function(message, senderId, recipientId) {
+    const query = `INSERT INTO chat (message, sender_id, recipient_id) VALUES ($1, $2, $3) RETURNING created_at`
+
+    return db.query(query, [message, senderId, recipientId])
+    .then((dbPrivMsg) => {
+
+        const user_message = {
+            newMessage: true,
+            message: message,
+            time: dbPrivMsg.rows[0].created_at
+        }
+        const friend_message = {
+            newMessage: false,
+            message: message,
+            time: dbPrivMsg.rows[0].created_at
+        }
+        return {
+            userMessage: { recipientId: recipientId, message: user_message },
+            friendMessage: { recipientId: senderId, message: friend_message }
+        }
+    });
 }

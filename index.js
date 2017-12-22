@@ -11,7 +11,7 @@ const express = require('express'),
       multer = require('multer'),
       uidSafe = require('uid-safe'),
       {upload} = require('./storage'),
-      server = require('http').Server(app),
+      server = require('http').createServer(app),
       io = require('socket.io')(server),
       // ==================================================================== \\
       socket_io = require('./socket_io')
@@ -34,10 +34,6 @@ app.use(function(req, res, next){
 });
 // __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 
-// __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
-//[socket_io] __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
-socket_io(app, io)
-// __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 
 // __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 const diskStorage = multer.diskStorage({
@@ -71,27 +67,28 @@ app.use(express.static('./public'))
 
 app.use('/', restfulRouter)
 
+// __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
+//[socket_io] __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
+socket_io(app, io)
+// __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
+
 
 app.get("/welcome/", (req, res) => {
-    console.log('session', req.session.user);
+
     // req.session.user ? res.redirect("/") : res.sendFile(`${__dirname}/index.html`)
     if(req.session.user) {
-        console.log('session is present');
         res.redirect("/")
     } else {
-        console.log('session is not present');
         res.sendFile(`${__dirname}/index.html`)
     }
 })
 
 app.get("*", (req, res) => {
-    console.log('session', req.session.user);
+
     // !req.session.user && req.url != '/welcome/' ? res.redirect("/welcome/") : res.sendFile(`${__dirname}/index.html`)
     if(!req.session.user && req.url != '/welcome/') {
-        console.log('first case');
         res.redirect("/welcome/")
     } else {
-        console.log('second case');
         res.sendFile(`${__dirname}/index.html`)
     }
 })
