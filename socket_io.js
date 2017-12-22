@@ -1,20 +1,16 @@
-console.log('here');
+
 const { loadPrivateMasseges, addPrivMsgToDb } = require('./database/database')
 module.exports = function(app, io) {
 
 let webSockets = []
+let loggedInUser
 
 io.on('connection', function(socket) {
     console.log(`socket with the id ${socket.id} is now connected`);
 
     socket.on('chat', ({recipientId}) => {
-    console.log('before crash: ', webSockets);
 
-    const {id: userId} = webSockets.filter(sngSocket => sngSocket.socketId === socket.id)[0]
-
-    // let userId = webSockets[webSockets.findIndex(webSocket => webSocket.socketId === socketId)].id
-    console.log('iserId', userId);
-    loadPrivateMasseges(userId, recipientId)
+    loadPrivateMasseges(loggedInUser, recipientId)
         .then((prevPrivMsgs) => {
             io.sockets.sockets[socket.id].emit('prevPrivateChatMsgs', (prevPrivMsgs))
         })
@@ -26,16 +22,13 @@ io.on('connection', function(socket) {
     socket.on('newChatMsg', ({newPrivateMsg, recipientId}) => {
         const {id: userId} = webSockets.filter(sngSocket => sngSocket.socketId === socket.id)[0]
 
-        console.log('websockets', webSockets);
-        console.log(`${webSockets} e anche ${userId}`);
         recipientId = parseInt(recipientId)
 
         addPrivMsgToDb(newPrivateMsg, userId, recipientId)
         .then(({userMessage, friendMessage}) => {
-            console.log('done!', userMessage, friendMessage);
             const senderSocket = webSockets.filter(webSocket => webSocket.id == userId).map(senderSocket => senderSocket.socketId)
-            const recipientSocket = webSockets.filter(webSocket => webSockets.id == recipientId).map(recSocket => recSocket.socketId)
-            console.log(`sender: ${senderSocket}, receiver: ${recipientSocket}`);
+
+            const recipientSocket = webSockets.filter(webSocket => webSocket.id == recipientId).map(recSocket => recSocket.socketId)
 
             if(senderSocket.length > 1) {
                 for(let sock = 0; sock < senderSocket.length; sock++) {
@@ -47,13 +40,16 @@ io.on('connection', function(socket) {
 
             if(recipientSocket.length > 0){
                 if(recipientSocket.length > 1) {
+                    console.log('emitting new msg to recipientSocket', recipientSocket);
                     for(let recSock = 0; recSock < recipientSocket.length; recSock++) {
                         io.sockets.sockets[recipientSocket[recSock]].emit('newChatMsg', friendMessage)
                     }
                 } else {
+                    console.log('emitting new msg to recipientSocket', recipientSocket);
                     io.sockets.sockets[recipientSocket].emit('newChatMsg', friendMessage)
                 }
             } else {
+                console.log('false');
                 return;
             }
         })
@@ -64,17 +60,12 @@ io.on('connection', function(socket) {
 app.get('/connected/:socketId', (req, res, next) => {
     const {socketId} = req.params
     const {id} = req.session.user
-
+    loggedInUser = id
     webSockets.push({ id, socketId })
-    let userJoined = webSockets.every(webSocket => webSocket.userId !== id)
 
     console.log('user came: updating list of websockets', );
     console.log(`${socketId} belongs to userId ${id}`);
 
-    if (userJoined) {
-        console.log(`user Joined: ${userJoined}, with id: ${id}`);
-        // io.sockets.sockets[socketId].broadcast.emit('userIsOnline', user)
-    }
 
     io.sockets.sockets[socketId].on("disconnect", () => {
             // Updating the list of WebSockets
