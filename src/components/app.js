@@ -1,17 +1,12 @@
-<<<<<<< HEAD
-import React, {Component, PropTypes} from 'react'
-import { Link } from 'react-router'
-import {connect} from 'react-redux'
-=======
+
 import _ from 'lodash'
 import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
->>>>>>> 7b34298a55b28646339fcc35e13894aac8166435
 import {store} from '../start'
 // import {getUserinfo, displayInfoWheather} from '../actions'
 import {getUserinfo} from '../actions/index'
-import axios from 'axios'
+
 import ProfilePic from './profilePic'
 import getSocket from '../socket_io'
 // import {geolocated} from 'react-geolocated';
@@ -106,8 +101,5 @@ const mapStateToProps = function(state) {
 //     }
 // }
 
-<<<<<<< HEAD
-export default connect(mapStateToProps, mapDispatchToProps)(App)
-=======
+
 export default connect(mapStateToProps, { getUserinfo })(App)
->>>>>>> 7b34298a55b28646339fcc35e13894aac8166435
