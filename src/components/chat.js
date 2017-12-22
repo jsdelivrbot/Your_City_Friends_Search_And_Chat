@@ -7,6 +7,7 @@ import getSocket from '../socket_io'
 
 class PrivateChat extends Component {
     componentDidMount() {
+        getSocket()
         const {id: recipientId} = this.props.match.params
 
         if(!store.getState().prevChatMsgs) {

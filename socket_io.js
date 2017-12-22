@@ -7,11 +7,12 @@ let webSockets = []
 io.on('connection', function(socket) {
     console.log(`socket with the id ${socket.id} is now connected`);
 
-
-
     socket.on('chat', ({recipientId}) => {
-    console.log(recipientId);
+    console.log('before crash: ', webSockets);
+
     const {id: userId} = webSockets.filter(sngSocket => sngSocket.socketId === socket.id)[0]
+
+    // let userId = webSockets[webSockets.findIndex(webSocket => webSocket.socketId === socketId)].id
     console.log('iserId', userId);
     loadPrivateMasseges(userId, recipientId)
         .then((prevPrivMsgs) => {
@@ -64,10 +65,10 @@ app.get('/connected/:socketId', (req, res, next) => {
     const {socketId} = req.params
     const {id} = req.session.user
 
+    webSockets.push({ id, socketId })
     let userJoined = webSockets.every(webSocket => webSocket.userId !== id)
 
-    webSockets.push({ id, socketId })
-
+    console.log('user came: updating list of websockets', );
     console.log(`${socketId} belongs to userId ${id}`);
 
     if (userJoined) {
@@ -77,13 +78,10 @@ app.get('/connected/:socketId', (req, res, next) => {
 
     io.sockets.sockets[socketId].on("disconnect", () => {
             // Updating the list of WebSockets
-            webSockets = webSockets.filter(webSocket => webSocket.id !== id)
-            // Checking if the user left
-            userLeft = webSockets.every(webSocket => webSocket.id !== id)
-            // If the user left, send his ID to all users still connected
-            console.log('after disconnection', webSockets);
-        })
+            webSockets = webSockets.filter(webSocket => webSocket.socketId !== socketId)
 
+        })
+        return res.json({ success: true })
     console.log('total sockets', webSockets);
 })
 }

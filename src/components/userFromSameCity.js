@@ -8,6 +8,7 @@ import getSocket from '../socket_io'
 class UserFromSameCity extends Component {
 
     componentDidMount() {
+        getSocket()
         const {getUserinfo, addPeopleFromSameCity} = this.props
 
         getUserinfo().then(() => {

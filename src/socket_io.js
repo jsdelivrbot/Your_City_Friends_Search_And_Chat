@@ -9,7 +9,10 @@ console.log('socket connectefd!!!');
 
 export default function getSocket() {
     if(!socket) {
-        socket = io.connect()
+        socket =   io.connect({
+                    upgrade: false,
+                    transports: ['websocket']
+                    })
         // socket =   io.connect({upgrade: false, transports: ['websocket']})
         socket.on('connect', () => {
             Axios.get(`/connected/${socket.id}`)
