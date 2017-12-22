@@ -10,7 +10,7 @@ const spicedPg = require('spiced-pg'),
 exports.registerNewUser = function(firstname, lastname, email, password, gender) {
 
   return hashPassword(password).then((hashedPassword) => {
-      let image = gender === 'male' ? defaultImageMale : defaultImageFemale
+      let image = gender === 'male' ||  gender === 'Male' ? defaultImageMale : defaultImageFemale
 
       const query = `INSERT INTO users (firstname, lastname, email_address, password, gender, image)
                      VALUES ($1, $2, $3, $4, $5, '${image}') RETURNING id, firstname, lastname, gender`

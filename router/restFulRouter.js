@@ -73,6 +73,7 @@ router.get('/api/user', (req, res, next) => {
 
 
 router.post('/api/updatepicture', uploader.single('file'), (req, res) => {
+    console.log('uploading', req.file);
     const {mimetype, filename} = req.file
     const {id} = req.session.user
     if(mimetype === 'image/png' || mimetype === 'image/jpeg' || mimetype === 'image/jpg' || mimetype === 'image/gif') {

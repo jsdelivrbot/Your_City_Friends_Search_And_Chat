@@ -11,14 +11,14 @@ import Register from './components/register'
 // ***** Log-in components ******
 import App from './components/app'
 import DesignedTrip from './components/designedtrip'
-import CreateTrip from './components/createtrip'
+import userAddress from './components/userAddress'
+import UpdateProfilePic from './components/updateProfilePic'
 // __ __ __ __ __ __ __  Redux __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import {Provider} from 'react-redux'
 import promise from 'redux-promise'
 import reducers from './reducers'
-// import reducers from './reducer'
 //exporting to make it available to socket
 export const store = createStore(reducers, composeWithDevTools(applyMiddleware(promise)))
 
@@ -39,8 +39,9 @@ const loggedInRouter = (
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
+            <Route path="/updateProfPic" component={UpdateProfilePic}/>
+            <Route path="/userAddress" component={userAddress}/>
             <Route path="/" component={App}/>
-            <Route path="createTrip" component={CreateTrip}/>
             </Switch>
         </BrowserRouter>
     </Provider>
