@@ -28,6 +28,7 @@ class UserFromSameCity extends Component {
 
     renderUsers() {
         return _.map(this.props.usersFromSameCity, user => {
+            console.log('userrr', user);
             return user.map(usr => {
                 return (
                     <li>

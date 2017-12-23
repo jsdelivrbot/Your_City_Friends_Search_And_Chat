@@ -99,6 +99,9 @@ router.post('/api/findPeopleFromSameCity', (req, res) => {
 
     findPeopleFromSameCity(city)
     .then((usersData) => {
+        usersData = usersData.filter(user => {
+            return user.id !== req.session.user.id
+        })
         res.json({ success: true, usersData })
     })
     .catch((error) => {
