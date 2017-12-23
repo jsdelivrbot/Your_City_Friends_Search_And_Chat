@@ -63,16 +63,11 @@ app.get('/connected/:socketId', (req, res, next) => {
     loggedInUser = id
     webSockets.push({ id, socketId })
 
-    console.log('user came: updating list of websockets', );
-    console.log(`${socketId} belongs to userId ${id}`);
-
-
     io.sockets.sockets[socketId].on("disconnect", () => {
             // Updating the list of WebSockets
-            webSockets = webSockets.filter(webSocket => webSocket.socketId !== socketId)
+        webSockets = webSockets.filter(webSocket => webSocket.socketId !== socketId)
 
-        })
-        return res.json({ success: true })
-    console.log('total sockets', webSockets);
+    })
+    return res.json({ success: true })
 })
 }

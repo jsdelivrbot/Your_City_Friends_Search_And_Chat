@@ -31,8 +31,7 @@ class PrivateChat extends Component {
     renderPreviousChat() {
         console.log(this.props.chat);
         const {id} = this.props.match.params
-        return _.map(this.props.chat, privMessages => {
-            return privMessages[id].map(privMessage => {
+            return this.props.chat[id].map(privMessage => {
                 let style
                 if(!privMessage.newMessage) {
                     style = 'private_chat_sender'
@@ -46,18 +45,12 @@ class PrivateChat extends Component {
                     </div>
                 )
             })
-        })
     }
 
     render() {
         const {id} = this.props.match.params
-        const chattero = this.props.chat['chat']
-
-        const chatMsgs = _.filter(this.props.chat, privMessages => { return {id: privMessages} })[0]
-        console.log('chatz: ', chatMsgs);
-        // console.log('chattts', chattero);
-        // console.log('chattz', this.props.chat['chat']);
-        if(!this.props.chat || !chatMsgs) {
+    
+        if(!this.props.chat || !this.props.chat[id]) {
             return null
         }
 
