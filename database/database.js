@@ -5,7 +5,8 @@ const spicedPg = require('spiced-pg'),
       {hashPassword, checkPassword} = require('./hashpassword'),
       defaultImageMale = '/profile-default-male.png',
       defaultImageFemale = '/profile-default-female.jpg',
-      linkToAmazon = require('../config.json').s3Url
+      linkToAmazon = require('../config.json').s3Url,
+      _ = require('lodash')
 
 exports.registerNewUser = function(firstname, lastname, email, password, gender) {
 
@@ -188,4 +189,41 @@ exports.addPrivMsgToDb = function(message, senderId, recipientId) {
             friendMessage: { recipientId: senderId, message: friend_message }
         }
     });
+}
+
+exports.loadAllPrivMsgs = function(loggedInUser) {
+    const query = `SELECT sender_id, recipient_id from chat
+                   WHERE (sender_id = ($1))
+                   OR (recipient_id = ($1))
+                   ORDER BY created_at DESC`
+
+    const scnQuery = `SELECT id, firstname, lastname
+                      from users
+                      WHERE id = ANY($1)`
+
+    return db.query(query, [loggedInUser])
+    .then((allMsgs) => {
+
+    //gettin an array of all the user's ids the loggedUser interacted via chat:
+    let messages = allMsgs.rows.map(msgs => {
+        if(msgs.sender_id !== loggedInUser) {
+            let sender = msgs.sender_id
+            return {id: sender}
+        } else if(msgs.recipient_id !== loggedInUser) {
+            let recipient = msgs.recipient_id
+            return {id: recipient}
+        }
+    }).filter(msg => {
+        return msg !== undefined
+    })
+
+    messages = _.uniq(messages, function (e) {
+        return e.id
+    }).map(msg => { return msg.id })
+
+    return db.query(scnQuery, [messages])
+    .then((listOfMsgs) => {
+        return listOfMsgs.rows
+    })
+    })
 }

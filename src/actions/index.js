@@ -1,5 +1,6 @@
 import Axios from '../axios'
 
+export const ADD_ALL_PRIVATE_MESSAGES = 'add_all_private_messages'
 export const ADD_NEW_PRIVATE_MSG = 'add_new_private_msg'
 export const LOAD_PREVIOUS_PRIVATE_MSGS = 'load_previous_private_msgs'
 export const ADD_PEOPLE_FROM_SAME_CITY = 'add_people_from_same_city'
@@ -84,5 +85,13 @@ export function addNewMsg(newChatMsg) {
     return {
         type: ADD_NEW_PRIVATE_MSG,
         newChatMsg
+    }
+}
+
+export function addAllMsgs(allMsgs) {
+    console.log('in action for ALL MESSAGES', allMsgs);
+    return {
+        type: ADD_ALL_PRIVATE_MESSAGES,
+        allMsgs
     }
 }

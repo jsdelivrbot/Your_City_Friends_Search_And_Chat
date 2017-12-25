@@ -2,7 +2,7 @@ import * as io from 'socket.io-client'
 import { store } from './start'
 import { } from './actions'
 import Axios from './axios'
-import { loadPreviousPrivateMsgs, addNewMsg } from './actions/index'
+import { loadPreviousPrivateMsgs, addNewMsg, addAllMsgs } from './actions/index'
 let socket
 
 console.log('socket connectefd!!!');
@@ -24,6 +24,10 @@ export default function getSocket() {
         socket.on('newChatMsg', (newChatMsg) => {
             console.log('newChatMsg', newChatMsg);
             store.dispatch(addNewMsg(newChatMsg))
+        })
+
+        socket.on('allPrivMsgs', (allMsgs) => {
+            store.dispatch(addAllMsgs(allMsgs))
         })
     }
     return socket

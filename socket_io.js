@@ -1,12 +1,22 @@
 
-const { loadPrivateMasseges, addPrivMsgToDb } = require('./database/database')
+const { loadPrivateMasseges, addPrivMsgToDb, loadAllPrivMsgs } = require('./database/database')
 module.exports = function(app, io) {
 
 let webSockets = []
 let loggedInUser
 
 io.on('connection', function(socket) {
-    console.log(`socket with the id ${socket.id} is now connected`);
+
+    socket.on('allChatMsgs', () => {
+        loadAllPrivMsgs(loggedInUser)
+        .then((allMsgs) => {
+            console.log('all msgs', allMsgs);
+            io.sockets.sockets[socket.id].emit('allPrivMsgs', (allMsgs))
+        })
+        .catch((error) => {
+            console.log('error loading all chat messages', error);
+        })
+    })
 
     socket.on('chat', ({recipientId}) => {
 

@@ -8,6 +8,8 @@ import getSocket from '../socket_io'
 class PrivateChat extends Component {
     componentDidMount() {
         getSocket()
+
+        getSocket().emit('allChatMsgs')
         const {id: recipientId} = this.props.match.params
 
         if(!store.getState().prevChatMsgs) {
@@ -27,6 +29,29 @@ class PrivateChat extends Component {
         newPrivateMsg && getSocket().emit('newChatMsg', {newPrivateMsg, recipientId})
         this.newPrivateMsg.value = ''
     }
+
+    handleChatClick(recipientId) {
+        console.log(recipientId);
+        getSocket().emit('chat', {recipientId})
+    }
+
+    renderListOfChats() {
+        console.log('renderiamo', this.props.allChats);
+        return _.map(this.props.allChats, chatMsgs => {
+            console.log('singlechat',chatMsgs)
+            return chatMsgs.map(chatMsg => {
+                return (
+                    <div>
+                    <Link to={`/chat/${chatMsg.id}`}>
+                    <a onClick={e => this.handleChatClick(chatMsg.id)}>{chatMsg.firstname} {chatMsg.lastname}</a>
+                    </Link>
+                    <p></p>
+                    </div>
+                );
+            })
+        })
+    }
+
 
     renderPreviousChat() {
         console.log(this.props.chat);
@@ -53,9 +78,10 @@ class PrivateChat extends Component {
         if(!this.props.chat || !this.props.chat[id]) {
             return null
         }
-
+        console.log('allChats', this.props.allChats);
         return(
             <div className="priv-chat">
+            {this.renderListOfChats()}
             {this.renderPreviousChat()}
             <textarea
             placeholder="type here your message"
@@ -73,7 +99,8 @@ class PrivateChat extends Component {
 
 function mapStateToProps(state){
     return {
-        chat: state.chat
+        chat: state.chat,
+        allChats: state.allChats
     }
 }
 
