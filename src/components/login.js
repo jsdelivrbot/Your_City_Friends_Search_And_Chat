@@ -8,9 +8,10 @@ import { logUserIn } from '../actions/index'
 class Login extends Component {
 
     renderField(field) {
+        const className = `form-group ${touched && error ? 'has-danger' : '' }`
         const { meta: { touched, error } } = field
         return(
-            <div>
+            <div className={className}>
                 <label>{field.label}</label>
                 <input
                 className="form-control"
@@ -40,18 +41,23 @@ class Login extends Component {
         return (
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <Field
-                label="Email"
+                placeholder="EMAIL ADDRESS"
                 name="email"
                 type="email"
                 component={this.renderField}
                 />
                 <Field
-                label="Password"
+                placeholder="PASSWORD"
                 name="password"
                 type="password"
                 component={this.renderField}
                 />
-                <button type="submit">Submit</button>
+                <button
+                className="btn btn-primary center-block"
+                type="submit"
+                >
+                Submit
+                </button>
             </form>
         );
     }

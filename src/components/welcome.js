@@ -10,12 +10,17 @@ export default class Welcome extends Component {
         return(
             <div className="loggedout-container welcome">
                 <header>
-                <h1>DESIGN YOUR ROAD TRIP BRO</h1>
+                    <h1>Discover New Friends in Your City!</h1>
                 </header>
-                <Link to="/login">Login</Link>
+                <div className="col-sm-offset-5 text-center">
+                    <div className="btn-group">
+                        <Link id="btnRegistration" className="btn btn-primary" to="/register">Join us</Link>
+                        <Link id="btnLogin"className="btn btn-danger" to="/login">Login!</Link>
+                    </div>
+                </div>
                 <Register />
                 <footer>
-                <p>&copy; Pasquale Coretti</p>
+                    <p>&copy; Pasquale Coretti</p>
                 </footer>
             </div>
         )

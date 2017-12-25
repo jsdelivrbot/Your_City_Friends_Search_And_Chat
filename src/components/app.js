@@ -39,8 +39,9 @@ class App extends Component {
         return _.map(this.props.user, usr => {
             return (
                 <div>
+                <p>Hello, {usr.firstname}</p>
                 <ProfilePic />
-                <p>{usr.firstname}</p>
+                <p>{usr.bio}</p>
                 </div>
             );
         })
@@ -52,7 +53,6 @@ class App extends Component {
         }
 
         const {user, wheather, dispatch} = this.props
-            console.log('userrrrr', user);
         console.log('wheather', wheather);
         // {user.lat && user.lng && displayWheather()}
         // const displayWheather = () => {
@@ -67,14 +67,17 @@ class App extends Component {
 
 
         return(
-            <div>
-                <Link to="/userFromSameCity">Find friend from your same city!</Link>
-                <Link to="/userAddress">Update your information</Link>
+            <div className="container">
+                <div className="jumbotron">
+                    <h1>#FIND NEW FRIENDS</h1>
+                </div>
+                <Link to="/">Home | </Link>
+                <Link to="/userFromSameCity">Discover friends around you | </Link>
+                <Link to="/userAddress">Update your information | </Link>
                 {this.state.whether && <p>clear wheather today! perfect time to go out!</p>}
-                <p>hello {this.props.user.firstname}!</p>
                 {this.renderUser()}
                 {this.getWeather()}
-                <p></p>
+
 
             </div>
         )

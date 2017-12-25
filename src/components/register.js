@@ -7,9 +7,10 @@ import { createNewUser } from '../actions/index'
 class Register extends Component {
     renderField(field) {
         const { meta: { touched, error } } = field
+        const className = `form-group ${touched && error ? 'has-danger' : '' }`
+
         return(
-            <div>
-                <label>{field.label}</label>
+            <div className={className}>
                 <input
                 className="form-control"
                 placeholder={field.placeholder}
@@ -38,37 +39,41 @@ class Register extends Component {
         return (
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <Field
-                label="Firstname"
+                placeholder="FIRSTNAME"
                 name="firstname"
                 type="text"
                 component={this.renderField}
                 />
                 <Field
-                label="Lastname"
+                placeholder="LASTNAME"
                 name="lastname"
                 type="text"
                 component={this.renderField}
                 />
                 <Field
-                label="Email"
+                placeholder="EMAIL ADDRESS"
                 name="email"
                 type="email"
                 component={this.renderField}
                 />
                 <Field
-                label="Password"
+                placeholder="PASSWORD"
                 name="password"
                 type="password"
                 component={this.renderField}
                 />
                 <Field
-                label="Gender"
                 name="gender"
                 type="text"
                 placeholder="Male/Female"
                 component={this.renderField}
                 />
-                <button type="submit">Submit</button>
+                <button
+                className="btn btn-primary center-block"
+                type="submit"
+                >
+                Submit
+                </button>
             </form>
         );
     }

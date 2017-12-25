@@ -62,6 +62,7 @@ class UserFromSameCity extends Component {
     }
 }
 
+// here goes the notification alert!
 function mapStateToProps(state){
     return {
         user: state.user,

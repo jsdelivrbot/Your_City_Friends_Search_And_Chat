@@ -1,0 +1,10 @@
+.form-group {
+    margin: 0 auto;
+    float: none;
+    width: 300px;
+}
+
+#profile-picture {
+    width: 300px;
+    height: 300px;
+}

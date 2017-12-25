@@ -16,7 +16,12 @@ class ProfilePic extends Component {
     renderProfilePic() {
         return _.map(this.props.user, usr => {
             return (
-                <img onClick={() => this.toggleUploader()} src={usr.image}/>
+                <img
+                className="img-rounded"
+                id="profile-picture"
+                onClick={() => this.toggleUploader()}
+                src={usr.image}
+                />
             );
         })
     }
@@ -25,7 +30,7 @@ class ProfilePic extends Component {
         const { imageUploaderVisible } = this.state
         return (
             <div>
-    
+
             {this.renderProfilePic()}
             {imageUploaderVisible && <UpdateProfilePic />}
             </div>

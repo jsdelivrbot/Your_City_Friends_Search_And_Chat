@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {store} from '../start'
 import getSocket from '../socket_io'
-
+// implement the timestamp!
 class PrivateChat extends Component {
     componentDidMount() {
         getSocket()
@@ -49,7 +49,7 @@ class PrivateChat extends Component {
 
     render() {
         const {id} = this.props.match.params
-    
+
         if(!this.props.chat || !this.props.chat[id]) {
             return null
         }
