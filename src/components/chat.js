@@ -4,14 +4,15 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {store} from '../start'
 import getSocket from '../socket_io'
+import ActiveChatList from './activeChatList'
+import moment from 'moment'
+
 // implement the timestamp!
 class PrivateChat extends Component {
+
     componentDidMount() {
-        getSocket()
-
-        getSocket().emit('allChatMsgs')
         const {id: recipientId} = this.props.match.params
-
+        getSocket().emit('allChatMsgs')
         if(!store.getState().prevChatMsgs) {
             getSocket().emit('chat', {recipientId})
         }
@@ -24,34 +25,18 @@ class PrivateChat extends Component {
     submitMsg(event){
         const {newPrivateMsg} = this.state
         const {id: recipientId} = this.props.match.params
-        console.log(recipientId);
+
+        function addChatToList() {
+            getSocket().emit('allChatMsgs')
+            // clearInterval(int)
+        }
 
         newPrivateMsg && getSocket().emit('newChatMsg', {newPrivateMsg, recipientId})
+
+        setTimeout(addChatToList, 400)
+
         this.newPrivateMsg.value = ''
     }
-
-    handleChatClick(recipientId) {
-        console.log(recipientId);
-        getSocket().emit('chat', {recipientId})
-    }
-
-    renderListOfChats() {
-        console.log('renderiamo', this.props.allChats);
-        return _.map(this.props.allChats, chatMsgs => {
-            console.log('singlechat',chatMsgs)
-            return chatMsgs.map(chatMsg => {
-                return (
-                    <div>
-                    <Link to={`/chat/${chatMsg.id}`}>
-                    <a onClick={e => this.handleChatClick(chatMsg.id)}>{chatMsg.firstname} {chatMsg.lastname}</a>
-                    </Link>
-                    <p></p>
-                    </div>
-                );
-            })
-        })
-    }
-
 
     renderPreviousChat() {
         console.log(this.props.chat);
@@ -65,8 +50,8 @@ class PrivateChat extends Component {
                 }
                 return (
                     <div>
-                    <p>yoy</p>
                     <li className={style}><p>{privMessage.message}</p></li>
+                    <h6>{moment(privMessage.time).format('MMMM Do YYYY, h:mm:ss a')}</h6>
                     </div>
                 )
             })
@@ -74,14 +59,15 @@ class PrivateChat extends Component {
 
     render() {
         const {id} = this.props.match.params
-
+        console.log(moment);
         if(!this.props.chat || !this.props.chat[id]) {
             return null
         }
-        console.log('allChats', this.props.allChats);
+        console.log(this.props.chat);
         return(
             <div className="priv-chat">
-            {this.renderListOfChats()}
+            <Link to="/">Home</Link>
+            <ActiveChatList />
             {this.renderPreviousChat()}
             <textarea
             placeholder="type here your message"
@@ -89,7 +75,8 @@ class PrivateChat extends Component {
             onChange={event => this.handleChange(event)}
             />
             <button onClick={event => this.submitMsg(event)}
-            >Send
+            >
+            Send
             </button>
             </div>
         );

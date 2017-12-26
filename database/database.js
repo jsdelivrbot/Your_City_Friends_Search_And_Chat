@@ -132,9 +132,10 @@ exports.updateUserPersonalInfo = function(id, age, bio, city, lat, lng) {
 
 exports.findPeopleFromSameCity = function(city) {
     const query = `SELECT users.id, firstname, lastname, image, city, lat, lng
-                   FROM user_profiles
-                   INNER JOIN users
-                   ON (city = $1)`
+                   FROM users
+                   INNER JOIN user_profiles
+                   ON (city =  $1)
+                   WHERE (users.id = user_profiles.user_id)`
 
     return db.query(query, [city])
     .then((userData) => {
@@ -217,7 +218,7 @@ exports.loadAllPrivMsgs = function(loggedInUser) {
         return msg !== undefined
     })
 
-    messages = _.uniq(messages, function (e) {
+    messages = _.uniq(messages, (e) => {
         return e.id
     }).map(msg => { return msg.id })
 

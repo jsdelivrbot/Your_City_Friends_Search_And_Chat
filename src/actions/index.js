@@ -81,7 +81,7 @@ export function loadPreviousPrivateMsgs(prevPrivMsgs) {
 }
 
 export function addNewMsg(newChatMsg) {
-    console.log('in action', newChatMsg);
+    
     return {
         type: ADD_NEW_PRIVATE_MSG,
         newChatMsg
@@ -89,7 +89,7 @@ export function addNewMsg(newChatMsg) {
 }
 
 export function addAllMsgs(allMsgs) {
-    console.log('in action for ALL MESSAGES', allMsgs);
+
     return {
         type: ADD_ALL_PRIVATE_MESSAGES,
         allMsgs

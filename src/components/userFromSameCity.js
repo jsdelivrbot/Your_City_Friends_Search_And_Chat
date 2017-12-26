@@ -22,7 +22,7 @@ class UserFromSameCity extends Component {
 
     handleChatClick(recipientId) {
         console.log(recipientId);
-        getSocket().emit('chat', {recipientId})
+        // getSocket().emit('chat', {recipientId})
         //socket io get into the game
     }
 
