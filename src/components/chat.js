@@ -63,7 +63,8 @@ class PrivateChat extends Component {
         if(!this.props.chat || !this.props.chat[id]) {
             return null
         }
-        console.log(this.props.chat);
+
+
         return(
             <div className="priv-chat">
             <Link to="/">Home</Link>
