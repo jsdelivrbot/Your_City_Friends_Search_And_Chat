@@ -14,6 +14,8 @@ import userAddress from './components/userAddress'
 import UpdateProfilePic from './components/updateProfilePic'
 import UserFromSameCity from './components/userFromSameCity'
 import Chat from './components/chat'
+import Layout from './components/layout'
+import Header from './components/header'
 // __ __ __ __ __ __ __  Redux __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
@@ -38,15 +40,24 @@ const notLoggedInRouter = (
 
 const loggedInRouter = (
     <Provider store={store}>
-        <BrowserRouter>
-            <Switch>
-            <Route path="/chat/:id" component={Chat}/>
-            <Route path="/userFromSameCity" component={UserFromSameCity}/>
-            <Route path="/updateProfPic" component={UpdateProfilePic}/>
-            <Route path="/userAddress" component={userAddress}/>
-            <Route path="/" component={App}/>
-            </Switch>
-        </BrowserRouter>
+        <Layout>
+            <BrowserRouter>
+                <Switch>
+                    <div className="container">
+                        <nav>
+                            <li><Link to="/">Home</Link></li>
+                            <li><Link to="/userFromSameCity">People around you</Link></li>
+                            <li><Link to="/userAddress">Your Information</Link></li>
+                        </nav>
+                        <Route exact path="/" component={App}/>
+                        <Route path="/chat/:id" component={Chat}/>
+                        <Route path="/updateProfPic" component={UpdateProfilePic}/>
+                        <Route path="/userAddress" component={userAddress}/>
+                        <Route path="/userFromSameCity" component={UserFromSameCity}/>
+                    </div>
+                </Switch>
+            </BrowserRouter>
+        </Layout>
     </Provider>
 );
 const routerDom = location.pathname === '/welcome/' ? notLoggedInRouter : loggedInRouter

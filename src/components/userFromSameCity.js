@@ -8,7 +8,6 @@ import getSocket from '../socket_io'
 class UserFromSameCity extends Component {
 
     componentDidMount() {
-        getSocket()
         const {getUserinfo, addPeopleFromSameCity} = this.props
 
         getUserinfo().then(() => {
@@ -22,8 +21,6 @@ class UserFromSameCity extends Component {
 
     handleChatClick(recipientId) {
         console.log(recipientId);
-        // getSocket().emit('chat', {recipientId})
-        //socket io get into the game
     }
 
     renderUsers() {
@@ -33,7 +30,7 @@ class UserFromSameCity extends Component {
                 return (
                     <li>
                     <Link to={`/chat/${usr.id}`}>
-                    <a onClick={e => this.handleChatClick(usr.id)}>Chat</a>
+                    <a>Chat</a>
                     </Link>
                     <p>{usr.firstname}</p>
                     <p>{usr.lastname}</p>

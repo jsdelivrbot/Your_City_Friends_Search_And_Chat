@@ -12,14 +12,12 @@ class ActiveChatList extends Component {
     }
 
     renderListOfChats() {
-        console.log('renderiamo Nel Nuovo Component', this.props.allChats);
         return _.map(this.props.allChats, chatMsgs => {
-            console.log('singlechat',chatMsgs)
             return chatMsgs.map(chatMsg => {
                 return (
-                    <div>
-                    <Link to={`/chat/${chatMsg.id}`}>
-                    <a onClick={e => this.handleChatClick(chatMsg.id)}>{chatMsg.firstname} {chatMsg.lastname}</a>
+                    <div className="chatlist-li">
+                    <Link className="router-link" to={`/chat/${chatMsg.id}`}>
+                    <p onClick={e => this.handleChatClick(chatMsg.id)}>{chatMsg.firstname} {chatMsg.lastname}</p>
                     </Link>
                     <p></p>
                     </div>
@@ -30,11 +28,10 @@ class ActiveChatList extends Component {
 
     render() {
         return(
-            <div>
-            <p>#########</p>
-            {this.renderListOfChats()}
-            <p>########</p>
+            <div id="active-chat-bar" className="col-sm-3">
+            <ul>{this.renderListOfChats()}</ul>
             </div>
+
         );
     }
 }

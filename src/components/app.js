@@ -12,14 +12,9 @@ import getSocket from '../socket_io'
 
 class App extends Component {
 
-    // constructor(props) {
-    //     super(props)
-    //     this.state = {};
-    // }
     constructor(props) {
         super(props)
         this.state = {}
-        getSocket()
     }
 
     componentDidMount() {
@@ -60,24 +55,13 @@ class App extends Component {
         //         10000
         //     );
         // }
-
-
-
+        console.log('child', this.props.children);
 
 
         return(
             <div className="container">
-                <div className="jumbotron">
-                    <h1>#FIND NEW FRIENDS</h1>
-                </div>
-                <Link to="/">Home | </Link>
-                <Link to="/userFromSameCity">Discover friends around you | </Link>
-                <Link to="/userAddress">Update your information | </Link>
-                {this.state.whether && <p>clear wheather today! perfect time to go out!</p>}
                 {this.renderUser()}
                 {this.getWeather()}
-
-
             </div>
         )
     }
