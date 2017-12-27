@@ -1,11 +1,9 @@
 import * as io from 'socket.io-client'
 import { store } from './start'
-import { } from './actions'
 import Axios from './axios'
 import { loadPreviousPrivateMsgs, addNewMsg, addAllMsgs } from './actions/index'
-let socket
 
-console.log('socket connectefd!!!');
+let socket
 
 export default function getSocket() {
     if(!socket) {
@@ -13,7 +11,6 @@ export default function getSocket() {
                     upgrade: false,
                     transports: ['websocket']
                     })
-        // socket =   io.connect({upgrade: false, transports: ['websocket']})
         socket.on('connect', () => {
             Axios.get(`/connected/${socket.id}`)
         })
