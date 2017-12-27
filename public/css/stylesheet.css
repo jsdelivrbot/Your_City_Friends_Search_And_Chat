@@ -4,7 +4,106 @@
     width: 300px;
 }
 
+nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 30px;
+}
+
 #profile-picture {
     width: 300px;
     height: 300px;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+.router-link {
+    text-decoration: none;
+    color: black;
+}
+
+.router-link:hover {
+    text-decoration: none;
+    color: red;
+}
+/* Active chats component */
+
+#active-chat-bar {
+    color: black;
+}
+
+.chatlist-li:hover {
+    background-color: RoyalBlue;
+}
+.chatlist-li p {
+    text-align: center;
+    text-transform: capitalize;
+}
+
+.force-to-bottom textarea {
+    display: inline-block;
+    width: 70%;
+}
+
+.force-to-bottom {
+    width: 100%;
+    text-align: center;
+}
+
+#chat-btn {
+    display: inline-block;
+    margin-bottom: 58px;
+    height: 62px;
+    width: 68px;
+}
+
+.private_chat_sender{
+    border-bottom-right-radius: 15px;
+    text-align: right;
+    background-color: lightgray;
+    color: black;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    min-width: 200px;
+    max-width: 300px;
+    max-height: auto;
+    min-height: 40px;
+    list-style: none;
+}
+
+.private_chat_receiver {
+    border-bottom-left-radius: 15px;
+    text-align: left;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 80%;
+    background-color: blue;
+    color: white;
+    min-width: 200px;
+    max-width: 300px;
+    max-height: auto;
+    min-height: 40px;
+    list-style: none;
+}
+
+.private_chat_sender h4, .private_chat_receiver h4{
+    margin: 10px 20px;
+}
+
+.private_chat_sender h6, .private_chat_receiver h6 {
+    margin: 0px 20px;
+    font-size: 8pt;
 }

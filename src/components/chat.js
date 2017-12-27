@@ -12,6 +12,7 @@ class PrivateChat extends Component {
 
     componentDidMount() {
         const {id: recipientId} = this.props.match.params
+
         getSocket().emit('allChatMsgs')
         if(!store.getState().prevChatMsgs) {
             getSocket().emit('chat', {recipientId})
@@ -28,7 +29,6 @@ class PrivateChat extends Component {
 
         function addChatToList() {
             getSocket().emit('allChatMsgs')
-            // clearInterval(int)
         }
 
         newPrivateMsg && getSocket().emit('newChatMsg', {newPrivateMsg, recipientId})
@@ -39,46 +39,51 @@ class PrivateChat extends Component {
     }
 
     renderPreviousChat() {
-        console.log(this.props.chat);
+
         const {id} = this.props.match.params
             return this.props.chat[id].map(privMessage => {
                 let style
                 if(!privMessage.newMessage) {
-                    style = 'private_chat_sender'
-                } else {
                     style = 'private_chat_receiver'
+                } else {
+                    style = 'private_chat_sender'
                 }
                 return (
-                    <div>
-                    <li className={style}><p>{privMessage.message}</p></li>
+                    <li className={style}>
+                    <h4>{privMessage.message}</h4>
                     <h6>{moment(privMessage.time).format('MMMM Do YYYY, h:mm:ss a')}</h6>
-                    </div>
+                    </li>
                 )
             })
     }
 
     render() {
         const {id} = this.props.match.params
-        console.log(moment);
         if(!this.props.chat || !this.props.chat[id]) {
             return null
         }
-
-
         return(
-            <div className="priv-chat">
-            <Link to="/">Home</Link>
-            <ActiveChatList />
-            {this.renderPreviousChat()}
-            <textarea
-            placeholder="type here your message"
-            ref={newPrivateMsg=>this.newPrivateMsg=newPrivateMsg}
-            onChange={event => this.handleChange(event)}
-            />
-            <button onClick={event => this.submitMsg(event)}
-            >
-            Send
-            </button>
+            //try with: row and col
+            <div  className="row">
+                <ActiveChatList />
+                <div className="col-sm-6">
+                    <ul>{this.renderPreviousChat()}</ul>
+                </div>
+                 <div className="row force-to-bottom text-center">
+                    <textarea
+                    className="form-control"
+                    placeholder="type here your message"
+                    ref={newPrivateMsg=>this.newPrivateMsg=newPrivateMsg}
+                    onChange={event => this.handleChange(event)}
+                    />
+                    <button
+                    className="btn btn-primary"
+                    id="chat-btn"
+                    onClick={event => this.submitMsg(event)}
+                    >
+                    Send
+                    </button>
+                </div>
             </div>
         );
     }
