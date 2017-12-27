@@ -5,6 +5,21 @@ import { connect } from 'react-redux'
 import { createNewUser } from '../actions/index'
 
 class Register extends Component {
+
+    handleErrors() {
+        return _.map(this.props.registration, error => {
+            if(error.error === 23505) {
+                return (
+                    <div>This email has already been registered</div>
+                );
+            } else if (error.error === 1007) {
+                return (
+                    <div>Oops, an error occurred!</div>
+                );
+            }
+        })
+    }
+
     renderField(field) {
         const { meta: { touched, error } } = field
         const className = `form-group ${touched && error ? 'has-danger' : '' }`
@@ -35,46 +50,49 @@ class Register extends Component {
 
     render() {
         const { handleSubmit } = this.props
-
+        console.log('renderrr', this.props.registration);
         return (
-            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <Field
-                placeholder="FIRSTNAME"
-                name="firstname"
-                type="text"
-                component={this.renderField}
-                />
-                <Field
-                placeholder="LASTNAME"
-                name="lastname"
-                type="text"
-                component={this.renderField}
-                />
-                <Field
-                placeholder="EMAIL ADDRESS"
-                name="email"
-                type="email"
-                component={this.renderField}
-                />
-                <Field
-                placeholder="PASSWORD"
-                name="password"
-                type="password"
-                component={this.renderField}
-                />
-                <Field
-                name="gender"
-                type="text"
-                placeholder="Male/Female"
-                component={this.renderField}
-                />
-                <button
-                className="btn btn-primary center-block"
-                type="submit"
-                >
-                Submit
-                </button>
-            </form>
+            <div>
+                {this.handleErrors()}
+                <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                    <Field
+                    placeholder="FIRSTNAME"
+                    name="firstname"
+                    type="text"
+                    component={this.renderField}
+                    />
+                    <Field
+                    placeholder="LASTNAME"
+                    name="lastname"
+                    type="text"
+                    component={this.renderField}
+                    />
+                    <Field
+                    placeholder="EMAIL ADDRESS"
+                    name="email"
+                    type="email"
+                    component={this.renderField}
+                    />
+                    <Field
+                    placeholder="PASSWORD"
+                    name="password"
+                    type="password"
+                    component={this.renderField}
+                    />
+                    <Field
+                    name="gender"
+                    type="text"
+                    placeholder="Male/Female"
+                    component={this.renderField}
+                    />
+                    <button
+                    className="btn btn-primary center-block"
+                    type="submit"
+                    >
+                    Submit
+                    </button>
+                </form>
+            </div>
         );
     }
 }
@@ -99,9 +117,15 @@ function validate(values) {
     return errors;
 }
 
+function mapStateToProps(state){
+    return {
+        registration: state.registration
+    }
+}
+
 export default reduxForm({
     validate,
     form: 'RegisteNewUserForm'
 })(
-    connect(null, { createNewUser })(Register)
+    connect(mapStateToProps, { createNewUser })(Register)
 );

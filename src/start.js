@@ -20,13 +20,15 @@ import Header from './components/header'
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import {Provider} from 'react-redux'
+import thunk from 'redux-thunk';
 import promise from 'redux-promise'
 import reducers from './reducers'
 //exporting to make it available to socket
 export const store = createStore(reducers, composeWithDevTools(applyMiddleware(promise)))
+const store_notLoggedInRouter = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)))
 
 const notLoggedInRouter = (
-    <Provider store={store}>
+    <Provider store={store_notLoggedInRouter}>
         <HashRouter>
             <Switch>
             <Route path="/register" component={Register}/>

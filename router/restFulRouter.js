@@ -2,6 +2,10 @@ const express = require('express'),
       router = express.Router(),
       {registerNewUser, verifyUserCredential, lookForAddressInformation, getUserInformation, getUserProfileInfo, addProfilePicture, updateUserPersonalInfo, findPeopleFromSameCity} = require('../database/database.js')
       const {uploader, uploadAWS3} = require('../storage')
+      // Redis Database ==============================================================
+      // redis.js exports the functions to query the redis database. It is used to
+      // keep track of invalid login attemtps and block accounts if needed
+      const redis = require("../redis/redis")
 
 router.post('/api/registration', (req, res, next) => {
     const {firstname, lastname, email, password, gender} = req.body
@@ -11,34 +15,53 @@ router.post('/api/registration', (req, res, next) => {
         res.json({success: true, userData})
     })
     .catch((error) => {
-        console.log(error);
-        next('error during adding user')
+        if(error.code == 23505) {
+            res.json({error: 23505 });
+        } else {
+            res.json({error: 1007})
+        }
     })
 })
+
+
 
 router.post('/api/login', (req, res, next) => {
     console.log(req.body);
     const {email, password} = req.body
-    verifyUserCredential(email, password)
-    .then((userData) => {
-        req.session.user = {user: true, id: userData.id, firstname: userData.firstname, lastname: userData.lastname, gender: userData.gender}
-        res.json({success: true, userData})
-        lookForAddressInformation(req.session.user.id)
-        .then((address) => {
-            if(typeof address !== 'undefined') {
-                req.session.user.city = address.city,
-                req.session.user.lat = address.lat,
-                req.session.user.lng = address.lng
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-
-        })
-    })
-    .catch((error) => {
-        console.log(error);
-        next('error verifying credentials')
+    redis.getInvalidAttempts(email)
+    .then(invalidAttempts => {
+        if (invalidAttempts < 3) {
+        // If the number of invalid attempts is less then 3, the  credentials
+        // are sent to the database and checked.
+            verifyUserCredential(email, password)
+            .then((userData) => {
+                req.session.user = {user: true, id: userData.id, firstname: userData.firstname, lastname: userData.lastname, gender: userData.gender}
+                res.json({success: true, userData})
+                lookForAddressInformation(req.session.user.id)
+                .then((address) => {
+                    if(typeof address !== 'undefined') {
+                        req.session.user.city = address.city,
+                        req.session.user.lat = address.lat,
+                        req.session.user.lng = address.lng
+                    }
+                })
+                .catch((error) => {
+                    throw `Error in retrieving user's address information`
+                })
+            })
+            .catch((error) => {
+                redis.invalidLogin(email, invalidAttempts)
+                return invalidAttempts < 2 ? res.json({ error: 1003 }) :
+                res.json({ error: 1004, blocked: 90})
+            })
+    } else {
+        redis.invalidLogin(email, invalidAttempts)
+            // The duration for which the account is blocked is sent back.
+            // N.B this calculation uses the number of invalid attemps before
+            // the current one
+            const blocked = Math.pow(2, invalidAttempts-2) * 90
+            return res.json({ error: 1004, blocked })
+        }
     })
 })
 
@@ -53,8 +76,6 @@ router.get('/api/user', (req, res, next) => {
         next('error retriving user information',)
     })
 })
-
-
 
 router.post('/api/updatepicture', uploader.single('file'), (req, res) => {
     const {mimetype, filename} = req.file

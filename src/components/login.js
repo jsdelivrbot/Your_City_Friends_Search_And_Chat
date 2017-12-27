@@ -6,6 +6,20 @@ import { logUserIn } from '../actions/index'
 
 
 class Login extends Component {
+    handleErrors() {
+        return _.map(this.props.login, error => {
+
+            if(error.error === 1003) {
+                return (
+                    <div>The Email or Password inserted is not correct!</div>
+                )
+            } else if(error.error === 1004) {
+                return (
+                    <div>You have inserted the wrong password too many time. Your account has been blocked for: {error.blocked} seconds!</div>
+                )
+            }
+        })
+    }
 
     renderField(field) {
         const className = `form-group ${touched && error ? 'has-danger' : '' }`
@@ -37,8 +51,10 @@ class Login extends Component {
 
     render() {
         const { handleSubmit } = this.props
-
+        console.log('FOOORM',this.props.login);
         return (
+            <div>
+            {this.handleErrors()}
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <Field
                 placeholder="EMAIL ADDRESS"
@@ -59,6 +75,7 @@ class Login extends Component {
                 Submit
                 </button>
             </form>
+            </div>
         );
     }
 }
@@ -77,9 +94,15 @@ function validate(values) {
     return errors;
 }
 
+function mapStateToProps(state){
+    return {
+        login: state.login
+    }
+}
+
 export default reduxForm({
     validate,
     form: 'logUserInForm'
 })(
-    connect(null, { logUserIn })(Login)
+    connect(mapStateToProps, { logUserIn })(Login)
 );
