@@ -7,6 +7,7 @@ import { HashRouter, BrowserRouter, Route, Switch, Link, Redirect } from 'react-
 import Welcome from './components/welcome'
 import Login from './components/login'
 import Register from './components/register'
+import WelcomeLayout from './components/welcomeLayout'
 //*******************************
 // ***** Log-in components ******
 import App from './components/app'
@@ -16,6 +17,7 @@ import UserFromSameCity from './components/userFromSameCity'
 import Chat from './components/chat'
 import Layout from './components/layout'
 import Header from './components/header'
+import ActiveChatList from './components/ActiveChatList'
 // __ __ __ __ __ __ __  Redux __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
@@ -29,13 +31,15 @@ const store_notLoggedInRouter = createStore(reducers, composeWithDevTools(applyM
 
 const notLoggedInRouter = (
     <Provider store={store_notLoggedInRouter}>
-        <HashRouter>
-            <Switch>
-            <Route path="/register" component={Register}/>
-            <Route path="/login" component={Login}/>
-            <Route path="/" component={Welcome}/>
-      	    </Switch>
-        </HashRouter>
+        <WelcomeLayout>
+            <HashRouter>
+                <Switch>
+                    <Route path="/register" component={Register}/>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/" component={Welcome}/>
+          	    </Switch>
+            </HashRouter>
+        </WelcomeLayout>
     </Provider>
 );
 
@@ -50,12 +54,14 @@ const loggedInRouter = (
                             <li><Link to="/">Home</Link></li>
                             <li><Link to="/userFromSameCity">People around you</Link></li>
                             <li><Link to="/userAddress">Your Information</Link></li>
+                            <li><Link to="/activeChatList">chat</Link></li>
                         </nav>
                         <Route exact path="/" component={App}/>
                         <Route path="/chat/:id" component={Chat}/>
                         <Route path="/updateProfPic" component={UpdateProfilePic}/>
                         <Route path="/userAddress" component={userAddress}/>
                         <Route path="/userFromSameCity" component={UserFromSameCity}/>
+                        <Route path="/activeChatList" component={ActiveChatList}/>
                     </div>
                 </Switch>
             </BrowserRouter>

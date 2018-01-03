@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { createNewUser } from '../actions/index'
 
 class Register extends Component {
-
     handleErrors() {
         return _.map(this.props.registration, error => {
             if(error.error === 23505) {
@@ -22,7 +21,7 @@ class Register extends Component {
 
     renderField(field) {
         const { meta: { touched, error } } = field
-        const className = `form-group ${touched && error ? 'has-danger' : '' }`
+        const className = `form-container ${touched && error ? 'has-danger' : '' }`
 
         return(
             <div className={className}>
@@ -52,7 +51,7 @@ class Register extends Component {
         const { handleSubmit } = this.props
         console.log('renderrr', this.props.registration);
         return (
-            <div>
+            <div className="welcome-container">
                 {this.handleErrors()}
                 <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                     <Field
@@ -86,34 +85,46 @@ class Register extends Component {
                     component={this.renderField}
                     />
                     <button
-                    className="btn btn-primary center-block"
+                    className="welcome-button"
                     type="submit"
                     >
                     Submit
                     </button>
+                    <Link
+                    className="other-link"
+                    to="/login">
+                    Login
+                    </Link>
                 </form>
+
             </div>
         );
     }
 }
 
 function validate(values) {
-    //console.log(values) => {title: '...', categories: '...', content: '...'}
     const errors = {};
+    const strongPassword = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
     if (!values.firstname || values.firstname.length < 3) {
-        errors.firstname = "Enter a title that is at least 3 characters!"
-    }
-    if (!values.age) {
-        errors.age = 'Enter some categories please!'
-    }
-    if (!values.gender) {
-        errors.gender = 'Enter some content please!'
-    }
-    if(values.gender !== 'Male' && values.gender !== 'male' && values.gender !== 'Female' && values.gender !== 'female') {
-        errors.gender = "Please enter your gender as: 'Male/Female'"
+        errors.firstname = `Enter a Firstname that is at least 3 characters long!`
     }
 
+    if (!values.lastname || values.lastname.length < 3) {
+        errors.lastname = `Enter a Lastname that is at least 3 characters long!`
+    }
+
+    if (!values.email) {
+        errors.email = `Don't forget to enter your email!`
+    }
+
+    if (!strongPassword.test(values.password)) {
+        errors.password = `Your password needs to be at least 8 characters long and needs to have at least: 1  uppercase alphabetical character, one lowercase alphabetical character, one numeric character, one special character (?,@,#..)`
+    }
+
+    if(values.gender !== 'Male' && values.gender !== 'male' && values.gender !== 'Female' && values.gender !== 'female') {
+        errors.gender = `Please enter your gender as: 'Male/Female'`
+    }
     return errors;
 }
 

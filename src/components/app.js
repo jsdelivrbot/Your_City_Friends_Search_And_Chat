@@ -3,12 +3,9 @@ import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import {store} from '../start'
-// import {getUserinfo, displayInfoWheather} from '../actions'
 import {getUserinfo} from '../actions/index'
-
 import ProfilePic from './profilePic'
 import getSocket from '../socket_io'
-// import {geolocated} from 'react-geolocated';
 
 class App extends Component {
 
@@ -18,16 +15,11 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.props.getUserinfo().then(() => {
-            console.log('user did mount:', this.props.user);
-        })
-        console.log(this.props.isGeolocationAvailable)
-
+        this.props.getUserinfo()
     }
 
     getWeather() {
         const { user: {lat, lng} } = this.props
-        // this.props.displayInfoWheather(lat, lng)
     }
     renderUser(){
         return _.map(this.props.user, usr => {
@@ -79,13 +71,6 @@ const mapStateToProps = function(state) {
         wheather: state.wheather
     };
 };
-
-// function mapStateToProps(state){
-//     return {
-//         user: state.user,
-//         wheather: state.wheather
-//     }
-// }
 
 
 export default connect(mapStateToProps, { getUserinfo })(App)

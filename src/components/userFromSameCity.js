@@ -11,24 +11,26 @@ class UserFromSameCity extends Component {
         const {getUserinfo, addPeopleFromSameCity} = this.props
 
         getUserinfo().then(() => {
-            let city = _.map(this.props.user, usr => {
-                return usr.city
-            })
+            let city = _.map(this.props.user, usr => { return usr.city })
             city = city.toString()
-            addPeopleFromSameCity({city: city})
+            addPeopleFromSameCity({city})
         })
     }
 
     checkForCompleteInformation() {
         return _.map(this.props.user, user => {
             if(!user.city) {
-                return (<div>Please update your info <Link to="/userAddress"></Link> </div>)
+                return (<div> <Link to="/userAddress">Please update your info</Link> </div>)
             }
         })
     }
 
-    handleChatClick(recipientId) {
-        console.log(recipientId);
+    renderCity() {
+        const city = _.map(this.props.user, user => {return user.city})
+
+        return (
+            <p>Users from: <strong><em>{city}</em></strong></p>
+        )
     }
 
     renderUsers() {
@@ -41,14 +43,24 @@ class UserFromSameCity extends Component {
             } else {
                 return user.map(usr => {
                     return (
-                        <li>
-                        <Link to={`/chat/${usr.id}`}>
-                        <a>Chat</a>
+                        <Link
+                        to={`/chat/${usr.id}`}
+                        style={{ textDecoration: 'none', color: 'black' }}
+                        >
+                            <li className="list-city-friends">
+                                <div className="main-wrapper">
+                                    <div className="img-wrapper">
+                                        <img className="city-friend-img" src={usr.image}/>
+                                    </div>
+                                    <div className="text-wrapper">
+                                        <p><em>Firstname:</em> {usr.firstname}</p>
+                                        <p><em>Lastname:</em> {usr.lastname}</p>
+                                        <p><em>Bio:</em> {usr.city}</p>
+                                        <p><em>Age:</em> {usr.age}</p>
+                                    </div>
+                                </div>
+                            </li>
                         </Link>
-                        <p>{usr.firstname}</p>
-                        <p>{usr.lastname}</p>
-                        <p>{usr.city}</p>
-                        </li>
                     );
                 })
             }
@@ -56,17 +68,10 @@ class UserFromSameCity extends Component {
     }
 
     render() {
-        console.log('other users:', this.props.usersFromSameCity);
-        console.log('user', this.props.user);
-        // if(!this.props.user.city) {
-        //     return (
-        //         <div>Please, first update you city info</div>
-        //     )
-        // }
-
         return(
-            <div>
+            <div className="chat-container">
                 {this.checkForCompleteInformation()}
+                {this.renderCity()}
                 <ul>
                 {this.renderUsers()}
                 </ul>

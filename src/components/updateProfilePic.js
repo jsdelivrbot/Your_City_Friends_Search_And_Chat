@@ -8,20 +8,22 @@ import { uploadPic, getUserinfo } from '../actions/index'
 class UpdateProfilePic extends Component {
 
     renderField(field) {
-        console.log(field);
-        // const props = this.props.fields[field.name];
         const { meta: { touched, error } } = field
         const { input: {onDrop, onChange, onFocus, onUpdate} } = field
+
         return(
             <div>
                 <label>{field.label}</label>
                 <input
+                className="inputfile"
                 type="file"
+                id="file"
                 onDrop={onDrop}
                 onChange={onChange}
                 onFocus={onFocus}
                 onUpdate={onUpdate}
                 />
+                <label htmlFor="file">Choose a file</label>
                 <div>
                     {touched ? error : ''}
                 </div>
@@ -33,8 +35,9 @@ class UpdateProfilePic extends Component {
         var formData = new FormData();
         const { image } = file
         formData.append('file', image[0])
-        uploadPic(formData, () =>{
+        uploadPic(formData, () => {
             this.props.getUserinfo()
+            this.props.toggleUploader()
         })
 
     }
@@ -43,14 +46,17 @@ class UpdateProfilePic extends Component {
         const { handleSubmit } = this.props
 
         return (
-            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <Field
-                label="Picture"
-                name="image"
-                component={this.renderField}
-                />
-                <button type="submit">Upload</button>
-            </form>
+            <div className="uploader-container">
+                <a className="close-window-utility" onClick={() => this.props.toggleUploader()}>X</a>
+                <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+                    <Field
+                    label="Upload a picture:"
+                    name="image"
+                    component={this.renderField}
+                    />
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
         );
     }
 }

@@ -30,9 +30,8 @@ class ProfilePic extends Component {
         const { imageUploaderVisible } = this.state
         return (
             <div>
-
             {this.renderProfilePic()}
-            {imageUploaderVisible && <UpdateProfilePic />}
+            {imageUploaderVisible && <UpdateProfilePic toggleUploader={this.toggleUploader.bind(this)} />}
             </div>
         );
     }

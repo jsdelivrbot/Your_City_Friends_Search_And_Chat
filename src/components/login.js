@@ -22,28 +22,29 @@ class Login extends Component {
     }
 
     renderField(field) {
-        const className = `form-group ${touched && error ? 'has-danger' : '' }`
         const { meta: { touched, error } } = field
+        const className = `form-container ${touched && error ? 'has-danger' : '' }`
+
         return(
-            <div className={className}>
-                <label>{field.label}</label>
-                <input
-                className="form-control"
-                placeholder={field.placeholder}
-                type={field.type}
-                {...field.input}
-                />
-                <div>
-                    {touched ? error : ''}
+                <div className={className}>
+                    <label>{field.label}</label>
+                    <input
+                    className="form-control"
+                    placeholder={field.placeholder}
+                    type={field.type}
+                    {...field.input}
+                    />
+                    <div>
+                        {touched ? error : ''}
+                    </div>
                 </div>
-            </div>
         );
     }
 
     onSubmit(values) {
         const { logUserIn, history } = this.props
         const {email, password} = values
-        console.log(values);
+
         logUserIn(email, password, () => {
             location.replace('/')
         })
@@ -51,9 +52,8 @@ class Login extends Component {
 
     render() {
         const { handleSubmit } = this.props
-        console.log('FOOORM',this.props.login);
         return (
-            <div>
+            <div className="welcome-container">
             {this.handleErrors()}
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <Field
@@ -69,11 +69,17 @@ class Login extends Component {
                 component={this.renderField}
                 />
                 <button
-                className="btn btn-primary center-block"
+                className="welcome-button"
                 type="submit"
                 >
                 Submit
                 </button>
+                <Link
+                className="other-link"
+                to="/">
+                Join us
+                </Link>
+
             </form>
             </div>
         );

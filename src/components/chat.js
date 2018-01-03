@@ -7,13 +7,12 @@ import getSocket from '../socket_io'
 import ActiveChatList from './activeChatList'
 import moment from 'moment'
 
-// implement the timestamp!
 class PrivateChat extends Component {
 
     componentDidMount() {
         const {id: recipientId} = this.props.match.params
 
-        getSocket().emit('allChatMsgs')
+        // getSocket().emit('allChatMsgs')
         if(!store.getState().prevChatMsgs) {
             getSocket().emit('chat', {recipientId})
         }
@@ -32,15 +31,13 @@ class PrivateChat extends Component {
         }
 
         newPrivateMsg && getSocket().emit('newChatMsg', {newPrivateMsg, recipientId})
-
         setTimeout(addChatToList, 400)
-
         this.newPrivateMsg.value = ''
     }
 
     renderPreviousChat() {
-
         const {id} = this.props.match.params
+
             return this.props.chat[id].map(privMessage => {
                 let style
                 if(!privMessage.newMessage) {
@@ -59,27 +56,29 @@ class PrivateChat extends Component {
 
     render() {
         const {id} = this.props.match.params
+
         if(!this.props.chat || !this.props.chat[id]) {
             return null
         }
+
         return(
-            //try with: row and col
-            <div  className="row">
-                <ActiveChatList />
-                <div className="col-sm-6">
-                    <ul>{this.renderPreviousChat()}</ul>
+            <div className="main-chat-wrapper">
+                <div className="priv-chat-container">
+                    <ActiveChatList />
+                    <div id="previous-chat-container">
+                        <ul>{ this.renderPreviousChat() }</ul>
+                    </div>
                 </div>
-                 <div className="row force-to-bottom text-center">
+                <div className="private_chat-editor">
                     <textarea
                     className="form-control"
                     placeholder="type here your message"
-                    ref={newPrivateMsg=>this.newPrivateMsg=newPrivateMsg}
-                    onChange={event => this.handleChange(event)}
+                    ref={ newPrivateMsg=>this.newPrivateMsg=newPrivateMsg }
+                    onChange={ event => this.handleChange(event) }
                     />
                     <button
-                    className="btn btn-primary"
                     id="chat-btn"
-                    onClick={event => this.submitMsg(event)}
+                    onClick={ event => this.submitMsg(event) }
                     >
                     Send
                     </button>

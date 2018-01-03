@@ -6,8 +6,11 @@ import getSocket from '../socket_io'
 
 class ActiveChatList extends Component {
 
+    componentDidMount() {
+        getSocket().emit('allChatMsgs')
+    }
+
     handleChatClick(recipientId) {
-        console.log(recipientId);
         getSocket().emit('chat', {recipientId})
     }
 
@@ -27,8 +30,9 @@ class ActiveChatList extends Component {
     }
 
     render() {
+        console.log(this.props.allChats);
         return(
-            <div id="active-chat-bar" className="col-sm-3">
+            <div id="active-chat-bar">
             <ul>{this.renderListOfChats()}</ul>
             </div>
 
