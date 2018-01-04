@@ -17,7 +17,7 @@ import UserFromSameCity from './components/userFromSameCity'
 import Chat from './components/chat'
 import Layout from './components/layout'
 import Header from './components/header'
-import ActiveChatList from './components/ActiveChatList'
+import ActiveChatList from './components/activeChatList'
 // __ __ __ __ __ __ __  Redux __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ \\
 import {createStore, applyMiddleware} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
