@@ -37,20 +37,20 @@ class PrivateChat extends Component {
     renderPreviousChat() {
         const {id} = this.props.match.params
 
-            return this.props.chat[id].map(privMessage => {
-                let style
-                if(!privMessage.newMessage) {
-                    style = 'private_chat_receiver'
-                } else {
-                    style = 'private_chat_sender'
-                }
-                return (
-                    <li className={style}>
-                    <h4>{privMessage.message}</h4>
-                    <h6>{moment(privMessage.time).format('MMMM Do YYYY, h:mm:ss a')}</h6>
-                    </li>
-                )
-            })
+        return this.props.chat[id].map(privMessage => {
+            let style
+            if(!privMessage.newMessage) {
+                style = 'private_chat_receiver'
+            } else {
+                style = 'private_chat_sender'
+            }
+            return (
+                <li className={style}>
+                <h4>{privMessage.message}</h4>
+                <h6>{moment(privMessage.time).format('MMMM Do YYYY, h:mm:ss a')}</h6>
+                </li>
+            )
+        })
     }
 
     render() {

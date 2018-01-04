@@ -23,7 +23,9 @@ class UpdateProfilePic extends Component {
                 onFocus={onFocus}
                 onUpdate={onUpdate}
                 />
-                <label htmlFor="file">Choose a file</label>
+                <label
+                style={{color: 'black'}} 
+                htmlFor="file">Choose a file</label>
                 <div>
                     {touched ? error : ''}
                 </div>

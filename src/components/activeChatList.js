@@ -30,7 +30,7 @@ class ActiveChatList extends Component {
     }
 
     render() {
-        console.log(this.props.allChats);
+        
         return(
             <div id="active-chat-bar">
             <ul>{this.renderListOfChats()}</ul>

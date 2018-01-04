@@ -35,7 +35,6 @@ class UserFromSameCity extends Component {
 
     renderUsers() {
         return _.map(this.props.usersFromSameCity, user => {
-            console.log('userrr', user);
             if(!user.length) {
                 return (
                     <div> No users in this city. Try again in a while</div>
