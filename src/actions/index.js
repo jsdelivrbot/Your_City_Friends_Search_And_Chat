@@ -14,8 +14,8 @@ export function createNewUser(firstname, lastname, email, password, gender, locR
     const request = Axios.post('/api/registration', {firstname, lastname, email, password, gender});
 
     return (dispatch) => {
-        request.then(({data}) => {
-                if(data.success) {
+        request.then(({ data }) => {
+            if(data.success) {
                 locReplace()
             } else {
                 dispatch({type: CREATE_NEW_USER, payload: data})
@@ -28,7 +28,7 @@ export function logUserIn(email, password, locReplace) {
     const request = Axios.post('/api/login', {email, password})
 
     return (dispatch) => {
-        request.then(({data}) => {
+        request.then(({ data }) => {
             if(data.success) {
                 return locReplace()
             } else {

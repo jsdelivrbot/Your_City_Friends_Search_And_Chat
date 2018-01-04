@@ -12,7 +12,6 @@ class PrivateChat extends Component {
     componentDidMount() {
         const {id: recipientId} = this.props.match.params
 
-        // getSocket().emit('allChatMsgs')
         if(!store.getState().prevChatMsgs) {
             getSocket().emit('chat', {recipientId})
         }

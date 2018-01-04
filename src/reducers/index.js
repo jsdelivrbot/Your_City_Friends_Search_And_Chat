@@ -4,9 +4,7 @@ import otherUserReducer from './otherUserReducer'
 import chatReducer from './chatReducer'
 import listOfMessagesReducer from './listOfMessagesReducer'
 import incorrectLogin from './incorrectLogin.js'
-//***
 import { reducer as formReducer } from 'redux-form'
-//***
 
 const rootReducer = combineReducers({
     login: incorrectLogin,
@@ -17,5 +15,8 @@ const rootReducer = combineReducers({
     allChats: listOfMessagesReducer,
     form: formReducer
 });
+
+
+
 
 export default rootReducer;

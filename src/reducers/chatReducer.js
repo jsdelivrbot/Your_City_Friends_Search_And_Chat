@@ -12,7 +12,6 @@ export default function(state = {}, action) {
 
         case ADD_NEW_PRIVATE_MSG:
         var {recipientId, message} = action.newChatMsg
-        console.log('in reduceeeer', action);
 
         return Object.assign({}, state, {
             [recipientId]: [...state[recipientId], message]
