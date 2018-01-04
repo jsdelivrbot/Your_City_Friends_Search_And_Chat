@@ -1,7 +1,7 @@
 const express = require('express'),
       app = express(),
       compression = require('compression'),
-      restfulRouter = require('./router/restfulRouter'),
+      restfulRouter = require('./router/restFulRouter'),
       port = process.env.PORT || 8080,
       bodyParser = require('body-parser'),
       cookieSession = require('cookie-session'),
