@@ -21,7 +21,8 @@ app.use(compression());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieSession({
-    secret: secret,
+    // secret: secret,
+    secret: 'hard to get a secret',
     maxAge: 1000 * 60 * 60 * 24 * 14
 }));
 
