@@ -131,7 +131,7 @@ exports.updateUserPersonalInfo = function(id, age, bio, city, lat, lng) {
 }
 
 exports.findPeopleFromSameCity = function(city) {
-    const query = `SELECT users.id, firstname, lastname, age, image, city, lat, lng
+    const query = `SELECT users.id, firstname, lastname, age, bio, image, city, lat, lng
                    FROM users
                    INNER JOIN user_profiles
                    ON (city =  $1)

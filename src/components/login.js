@@ -15,7 +15,7 @@ class Login extends Component {
                 )
             } else if(error.error === 1004) {
                 return (
-                    <div>You have inserted the wrong password too many time. Your account has been blocked for: {error.blocked} seconds!</div>
+                    <div>You have inserted the wrong password too many time. Your account has been blocked for: <span style={{color: "red"}}>{error.blocked} seconds</span>!</div>
                 )
             }
         })

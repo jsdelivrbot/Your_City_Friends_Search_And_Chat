@@ -54,7 +54,7 @@ class UserFromSameCity extends Component {
                                     <div className="text-wrapper">
                                         <p><em>Firstname:</em> {usr.firstname}</p>
                                         <p><em>Lastname:</em> {usr.lastname}</p>
-                                        <p><em>Bio:</em> {usr.city}</p>
+                                        <p><em>Bio:</em> {usr.bio}</p>
                                         <p><em>Age:</em> {usr.age}</p>
                                     </div>
                                 </div>
