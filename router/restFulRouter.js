@@ -71,7 +71,7 @@ router.get('/api/user', (req, res, next) => {
         res.json({success: true, userData})
     })
     .catch((error) => {
-        next('error retriving user information',)
+        next('error retriving user information')
     })
 })
 
