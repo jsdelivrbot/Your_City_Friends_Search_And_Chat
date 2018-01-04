@@ -1,5 +1,6 @@
 .DS_Store
 secret.json
-config.json
+
 key.json
 googleKey.json
+node_modules
