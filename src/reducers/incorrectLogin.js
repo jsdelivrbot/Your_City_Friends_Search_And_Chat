@@ -9,7 +9,6 @@ export default function(state = {}, action) {
          })
 
          case CREATE_NEW_USER:
-         console.log('reducer Registration', action);
          return Object.assign({}, state, {
               registration: action.payload
           })
