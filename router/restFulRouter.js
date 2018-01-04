@@ -26,7 +26,6 @@ router.post('/api/registration', (req, res, next) => {
 
 
 router.post('/api/login', (req, res, next) => {
-    console.log(req.body);
     const {email, password} = req.body
     redis.getInvalidAttempts(email)
     .then(invalidAttempts => {
@@ -72,7 +71,6 @@ router.get('/api/user', (req, res, next) => {
         res.json({success: true, userData})
     })
     .catch((error) => {
-        console.log('error:', error);
         next('error retriving user information',)
     })
 })
@@ -91,7 +89,6 @@ router.post('/api/updatepicture', uploader.single('file'), (req, res) => {
                 });
         })
         .catch((err) => {
-            console.log(err);
             throw 'Error in adding profile picture to the database'
         })
     } else {
@@ -101,7 +98,6 @@ router.post('/api/updatepicture', uploader.single('file'), (req, res) => {
 
 
 router.post('/api/updateUserInfo', (req, res) => {
-    console.log(req.body);
     const {age, bio, lat, lng, city} = req.body
     const {id} = req.session.user
 
