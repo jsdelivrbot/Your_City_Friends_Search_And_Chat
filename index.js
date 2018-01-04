@@ -7,7 +7,7 @@ const express = require('express'),
       cookieSession = require('cookie-session'),
       path = require('path'),
       csurf = require('csurf'),
-      secret = require('./secret.json').secret,
+      // secret = require('./secret.json').secret,
       multer = require('multer'),
       uidSafe = require('uid-safe'),
       {upload} = require('./storage'),
@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieSession({
     // secret: secret,
-    secret: 'hard to get a secret',
+    secret: 'a really hard to guess a secret',
     maxAge: 1000 * 60 * 60 * 24 * 14
 }));
 
