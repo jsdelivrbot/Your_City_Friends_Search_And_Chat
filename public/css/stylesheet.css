@@ -1,6 +1,9 @@
+@import url(https://fonts.googleapis.com/css?family=Varela+Round rel="stylesheet");
+
 * {
     margin: 0;
     padding: 0;
+    font-family: 'Varela Round', sans-serif;
 }
 
 /* WELCOME ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
@@ -12,20 +15,25 @@
 }
 
 header {
-    background-color: red;
+    background:
+    url('logo.jpg')
+    no-repeat
+    center;
+    background-size: cover;
     position: absolute;
     top: 0;
     width: 100%;
-    height: 15%;
+    height: 140px;
     text-align: center;
     padding: 30px;
+    color: white;
 }
 
 footer {
     width: 100%;
     position: absolute;
     bottom: 0;
-    background-color: red;
+    background-color: lightgray;
 }
 
 .welcome-container {
@@ -79,6 +87,59 @@ button:hover {
 
 /* LogIn                     */
 
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    text-align: center;
+}
+
+.profile-wrapper p {
+    text-transform: capitalize;
+}
+
+.biography-container {
+    margin-top: 30px;
+    margin-left: 50px;
+    margin-right: 50px;
+    height: 150px;
+    text-align: justify;
+    overflow: scroll;
+}
+.biography-container p {
+    font-size: 11pt;
+}
+
+#profile-picture {
+    width: 300px;
+    height: 300px;
+}
+
+@media screen and (max-width:720px) {
+    .profile-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .biography-container {
+        margin-top: 10px;
+        margin-left: 28px;
+        margin-right: 28px;
+        height: 150px;
+        text-align: justify;
+        overflow: scroll;
+    }
+    .biography-container p {
+        font-size: 11pt;
+    }
+    #profile-picture {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+
 /* Uploader: */
 
 .uploader-container {
@@ -92,9 +153,9 @@ button:hover {
     /* background: rgba(0, 0, 0, 0.3); */
     border: 1px solid black;
     background: white;
-    display: flex;
-    justify-content: center;
+    text-align: center;
 }
+
 .uploader-container p {
     font-size: 16pt;
     font-family: Georgia;
@@ -156,8 +217,18 @@ a.close-window-utility {
 
 .form-personal-info button {
     width: 100px;
-    height: 30px;
-    margin-left: 25%;
+    height: 40px;
+    background-color: Royalblue;
+    color: white;
+    margin-left: 35%;
+    margin-top: 5%;
+}
+
+@media screen and (max-width:720px) {
+    .form-personal-info {
+        width: 300px;
+        height: 300px;
+    }
 }
 
 .form-container p {
@@ -221,8 +292,10 @@ a.close-window-utility {
 }
 
 nav {
+    background: lightgray;
+    width: 100%;
     list-style-type: none;
-    margin-top: 200px;
+    margin-top: 140px;
     margin-bottom: 50px;
     text-align: center;
 }
@@ -233,22 +306,17 @@ nav li {
     text-decoration: none;
 }
 
+.nav-links {
+    height: 40px;
+    width: 40px;
+}
+
 @media screen and (max-width:720px) {
-  nav {
-    margin-top: 150px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  nav li {
-    display: block;
-    text-decoration: none;
-    color: white;
-  }
+  nav li { text-decoration: none; color: white; }
 }
 
 /*  Chat             */
+
 .main-chat-wrapper {
     height: 600px;
     overflow-y: scroll;
@@ -270,14 +338,7 @@ nav li {
 }
 
 @media screen and (max-width:720px) {
-    #previous-chat-container, #active-chat-bar {
-        height: 300px
-    }
-}
-
-#profile-picture {
-    width: 300px;
-    height: 300px;
+    #previous-chat-container, #active-chat-bar { height: 350px }
 }
 
 .private_chat-editor {
@@ -292,6 +353,11 @@ nav li {
   justify-content: center;
   align-items: flex-end;
   background-color: #96B9FF;
+}
+
+
+@media screen and (max-width:720px) {
+    .private_chat-editor {width: 100%}
 }
 
 #chat-btn {
@@ -316,7 +382,7 @@ a {
 
 .router-link:hover {
     text-decoration: none;
-    color: red;
+    color: white;
 }
 /* Active chats component */
 
@@ -334,18 +400,12 @@ a {
 .chatlist-li p {
     text-align: center;
     text-transform: capitalize;
+    margin-top: 7px;
 }
 
-.force-to-bottom textarea {
-    display: inline-block;
-    width: 70%;
-}
-
-.force-to-bottom {
-    width: 100%;
-    text-align: center;
-}
-
+/* @media screen and (max-width:720px) {
+    #previous-chat-container, #active-chat-bar { height: 300px }
+} */
 
 .private_chat_sender{
     border-bottom-right-radius: 15px;
@@ -386,15 +446,21 @@ a {
 }
 
 @media screen and (max-width:720px) {
-    .private_chat_sender, .private_chat_receiver {
-        max-width: 100px
+    .private_chat_sender {
+        max-width: 100px;
+        margin-right: 2%;
+
+    }
+    .private_chat_receiver {
+        margin-left: 35%;
+        max-width: 100px;
     }
 
     .private_chat_sender h4, .private_chat_receiver h4{
-        font-size: 8pt;
+        font-size: 12pt;
     }
 
     .private_chat_sender h6, .private_chat_receiver h6 {
-        font-size: 3pt;
+        font-size: 9pt;
     }
 }

@@ -18,40 +18,34 @@ class App extends Component {
         this.props.getUserinfo()
     }
 
+    //to be implemented
     getWeather() {
         const { user: {lat, lng} } = this.props
     }
-    renderUser(){
+
+    renderUser() {
         return _.map(this.props.user, usr => {
             return (
-                <div>
-                <p>Hello, {usr.firstname}</p>
+                <div className="profile-wrapper">
+                <p>Hello, {usr.firstname}!</p>
                 <ProfilePic />
-                <p>{usr.bio}</p>
+                <div className="biography-container">
+                    <p>{usr.bio}</p>
+                </div>
                 </div>
             );
         })
     }
-    render() {
 
+    render() {
         if(!this.props.user) {
             return (<div>Loading</div>)
         }
 
         const {user, wheather, dispatch} = this.props
-        console.log('wheather', wheather);
-        // {user.lat && user.lng && displayWheather()}
-        // const displayWheather = () => {
-        //     setInterval(
-        //         () => dispatch(displayInfoWheather(user.lat, user.lng)),
-        //         10000
-        //     );
-        // }
-        console.log('child', this.props.children);
-
 
         return(
-            <div className="container">
+            <div>
                 {this.renderUser()}
                 {this.getWeather()}
             </div>

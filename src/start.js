@@ -44,17 +44,18 @@ const notLoggedInRouter = (
 );
 
 
+
 const loggedInRouter = (
     <Provider store={store}>
         <Layout>
             <BrowserRouter>
                 <Switch>
-                    <div className="container">
+                    <div>
                         <nav>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/userFromSameCity">People around you</Link></li>
-                            <li><Link to="/userAddress">Your Information</Link></li>
-                            <li><Link to="/activeChatList">chat</Link></li>
+                            <li><Link to="/"><img className="nav-links" src="../css/home.png"/></Link></li>
+                            <li><Link to="/userFromSameCity"><img className="nav-links" src="../css/find-city-friends.png"/></Link></li>
+                            <li><Link to="/userAddress"><img className="nav-links" src="../css/update-info.svg"/></Link></li>
+                            <li><Link to="/activeChatList"><img className="nav-links" src="../css/chat-logo.png"/></Link></li>
                         </nav>
                         <Route exact path="/" component={App}/>
                         <Route path="/chat/:id" component={Chat}/>

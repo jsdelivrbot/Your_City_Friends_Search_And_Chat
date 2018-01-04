@@ -73,7 +73,7 @@ class PrivateChat extends Component {
                     <textarea
                     className="form-control"
                     placeholder="type here your message"
-                    ref={ newPrivateMsg=>this.newPrivateMsg=newPrivateMsg }
+                    ref={ newPrivateMsg => this.newPrivateMsg = newPrivateMsg }
                     onChange={ event => this.handleChange(event) }
                     />
                     <button
